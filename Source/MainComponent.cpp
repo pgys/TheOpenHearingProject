@@ -14,8 +14,14 @@ MainComponent::MainComponent():BandPassFilter(juce::dsp::IIR::Coefficients<float
     
 
     
-    
+    auto tohpLogo{ juce::ImageCache::getFromMemory(BinaryData::tohp_logo_pngCopy1_png,
+        BinaryData::tohp_logo_pngCopy1_pngSize) };
+    if (!tohpLogo.isNull())
+        mImageComponent.setImage(tohpLogo, juce::RectanglePlacement::stretchToFit);
+    else
+        jassert(!tohpLogo.isNull());
 
+    addAndMakeVisible(mImageComponent);
     addAndMakeVisible(volumeM);
     volumeM.setFont(Vfont);
 
@@ -40,7 +46,6 @@ MainComponent::MainComponent():BandPassFilter(juce::dsp::IIR::Coefficients<float
     button1.setRadioGroupId(volumeButtons);
     button2.setRadioGroupId(volumeButtons);
     button3.setRadioGroupId(volumeButtons);
-    
     button1.onClick = [this] {setGain(button1.getButtonText()); };
     button2.onClick = [this] {setGain(button2.getButtonText()); };
     button3.onClick = [this] {setGain(button3.getButtonText()); };
@@ -116,18 +121,18 @@ void MainComponent::getNextAudioBlock (const juce::AudioSourceChannelInfo& buffe
     // (to prevent the output of random noise)
 
    
-
+    
     auto* device = deviceManager.getCurrentAudioDevice();
     auto activeInputChannels = device->getActiveInputChannels();
     auto activeOutputChannels = device->getActiveOutputChannels();
     auto maxInputChannels = activeInputChannels.getHighestBit() + 1;
     auto maxOutputChannels = activeOutputChannels.getHighestBit() + 1;
-
+   
     juce::dsp::AudioBlock<float> block(bufferToFill.buffer->getArrayOfWritePointers(),
         bufferToFill.buffer->getNumChannels(),
         bufferToFill.startSample,
         bufferToFill.numSamples);
-
+    
     auto MidFreq = (float)middlefrequency.getValue();
     auto res = (float)resonance.getValue();
     Gain.setGainDecibels((float)gain);
@@ -179,6 +184,7 @@ void MainComponent::releaseResources()
 void MainComponent::paint (juce::Graphics& g)
 {
     // (Our component is opaque, so we must completely fill the background with a solid colour)
+    
     auto gradient = juce::ColourGradient(juce::Colours::seagreen,  0.0f, 0.0f, juce::Colours::deepskyblue, 0.0f, 800.0f, false);
     g.setGradientFill(gradient);
     g.fillAll();
@@ -192,6 +198,7 @@ void MainComponent::resized()
     // This is called when the MainContentComponent is resized.
     // If you add any child components, this is where you should
     // update their positions.
+    mImageComponent.setBounds(5, 10,70, 70 );
     visualizer.setCentreRelative(0.5f, 0.5f);
     visualizer.setBounds(60, 300, 250, 30);
     middlefrequency.setBounds(70, 450, 100, 200);
