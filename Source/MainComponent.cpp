@@ -50,7 +50,7 @@ MainComponent::MainComponent():BandPassFilter(juce::dsp::IIR::Coefficients<float
     button2.onClick = [this] {setGain(button2.getButtonText()); };
     button3.onClick = [this] {setGain(button3.getButtonText()); };
 
-    middlefrequency.setRange(250.0, 5000);
+    middlefrequency.setRange(250.0, 5000.0);
     middlefrequency.setSliderStyle(juce::Slider::SliderStyle::LinearVertical);
     middlefrequency.setTextBoxStyle(juce::Slider::TextBoxRight, false, 100, 20);
     freqLabel.setText("Frequency", juce::NotificationType::dontSendNotification);
@@ -200,7 +200,7 @@ void MainComponent::resized()
     // update their positions.
     mImageComponent.setBounds(5, 10,70, 70 );
     visualizer.setCentreRelative(0.5f, 0.5f);
-    visualizer.setBounds(60, 300, 250, 30);
+    visualizer.setBounds(60, 300, 250, 80);
     middlefrequency.setBounds(70, 450, 100, 200);
     //resonanceLabel.setBounds(10, 10, 90, 20);
     resonance.setBounds(270, 450, 100, 200);

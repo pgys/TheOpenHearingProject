@@ -27,7 +27,7 @@ void CustomLNF::drawLinearSlider(juce::Graphics& g, int x, int y, int width, int
         auto isTwoVal = (style == juce::Slider::SliderStyle::TwoValueVertical || style == juce::Slider::SliderStyle::TwoValueHorizontal);
         auto isThreeVal = (style == juce::Slider::SliderStyle::ThreeValueVertical || style == juce::Slider::SliderStyle::ThreeValueHorizontal);
 
-        auto trackWidth = juce::jmin(6.0f, slider.isHorizontal() ? (float)height * 0.25f : (float)width * 0.25f);
+        auto trackWidth = 9.0f;   //juce::jmin(6.0f, slider.isHorizontal() ? (float)height * 0.25f : (float)width * 0.25f);
 
         juce::Point<float> startPoint(slider.isHorizontal() ? (float)x : (float)x + (float)width * 0.5f,
             slider.isHorizontal() ? (float)y + (float)height * 0.5f : (float)(height + y));
@@ -38,7 +38,7 @@ void CustomLNF::drawLinearSlider(juce::Graphics& g, int x, int y, int width, int
         juce::Path backgroundTrack;
         backgroundTrack.startNewSubPath(startPoint);
         backgroundTrack.lineTo(endPoint);
-        g.setColour(juce::Colours::orange);
+        g.setColour(juce::Colours::deepskyblue);
         g.strokePath(backgroundTrack, { trackWidth, juce::PathStrokeType::curved, juce::PathStrokeType::rounded });
 
         juce::Path valueTrack;
@@ -69,7 +69,7 @@ void CustomLNF::drawLinearSlider(juce::Graphics& g, int x, int y, int width, int
         
         valueTrack.startNewSubPath(minPoint);
         valueTrack.lineTo(isThreeVal ? thumbPoint : maxPoint);
-        g.setColour(juce::Colours::deepskyblue);
+        g.setColour(juce::Colours::orange);
         g.strokePath(valueTrack, { trackWidth * 1.5f, juce::PathStrokeType::curved, juce::PathStrokeType::rounded });
 
         if (!isTwoVal)
@@ -87,11 +87,11 @@ void CustomLNF::drawLinearSlider(juce::Graphics& g, int x, int y, int width, int
             {
                 drawPointer(g, minSliderPos - sr,
                     juce::jmax(0.0f, (float)y + (float)height * 0.5f - trackWidth * 2.0f),
-                    trackWidth * 2.0f, pointerColour, 2);
+                    trackWidth * 5.0f, pointerColour, 2);
 
                 drawPointer(g, maxSliderPos - trackWidth,
                     juce::jmin((float)(y + height) - trackWidth * 2.0f, (float)y + (float)height * 0.5f),
-                    trackWidth * 2.0f, pointerColour, 4);
+                    trackWidth * 5.0f, pointerColour, 4);
             }
             else
             {
@@ -116,7 +116,7 @@ void CustomLNF::drawButtonBackground(juce::Graphics& g,
     auto cornerSize = 6.0f;
     auto bounds = button.getLocalBounds().toFloat().reduced(0.5f, 0.5f);
     
-    auto baseColour = juce::Colours::navajowhite.withMultipliedSaturation(button.hasKeyboardFocus(true) ? 1.3f : 0.9f).withMultipliedAlpha(button.isEnabled() ? 1.0f : 0.5f);
+    auto baseColour = juce::Colours::orange.withMultipliedSaturation(button.hasKeyboardFocus(true) ? 1.3f : 0.9f).withMultipliedAlpha(button.isEnabled() ? 1.0f : 0.5f);
 
     if (shouldDrawButtonAsDown || shouldDrawButtonAsHighlighted)
         baseColour = baseColour.contrasting(shouldDrawButtonAsDown ? 0.2f : 0.05f);

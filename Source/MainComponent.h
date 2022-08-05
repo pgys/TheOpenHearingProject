@@ -60,11 +60,6 @@ private:
     juce::Font font{};
     juce::Font Vfont{ 30.0f };
     juce::ImageComponent mImageComponent;
-    /*juce::Image hifrequency;
-    juce::Image lofrequency;
-    juce::Image hiresonance;
-    juce::Image loresonance;
-    juce::Image TOHPLogo{};*/
     juce::TextButton button1{ "+" };
     juce::TextButton button2{"++"};
     juce::TextButton button3{ "+++" };
