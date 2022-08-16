@@ -3,7 +3,7 @@
 
 
 //==============================================================================
-MainComponent::MainComponent():BandPassFilter(juce::dsp::IIR::Coefficients<float>::makeBandPass(44100, 20000, 0.1f))
+MainComponent::MainComponent():BandPassFilter(juce::dsp::IIR::Coefficients<float>::makeBandPass(44100, 20000, 0.1f)), gain{3.0}
 {
     // Make sure you set the size of the component after
     // you add any child components.
@@ -21,7 +21,39 @@ MainComponent::MainComponent():BandPassFilter(juce::dsp::IIR::Coefficients<float
     else
         jassert(!tohpLogo.isNull());
 
+    auto tohpBass{ juce::ImageCache::getFromMemory(BinaryData::bass_w_png,
+        BinaryData::bass_w_pngSize) };
+    if (!tohpLogo.isNull())
+        bassImageComponent.setImage(tohpBass, juce::RectanglePlacement::stretchToFit);
+    else
+        jassert(!tohpBass.isNull());
+
+    auto tohpSoft{ juce::ImageCache::getFromMemory(BinaryData::soft_w_png,
+        BinaryData::soft_w_pngSize) };
+    if (!tohpSoft.isNull())
+        softImageComponent.setImage(tohpSoft, juce::RectanglePlacement::stretchToFit);
+    else
+        jassert(!tohpSoft.isNull());
+
+    auto tohpLoud{ juce::ImageCache::getFromMemory(BinaryData::loud_w_png,
+        BinaryData::loud_w_pngSize) };
+    if (!tohpLoud.isNull())
+        loudImageComponent.setImage(tohpLoud, juce::RectanglePlacement::stretchToFit);
+    else
+        jassert(!tohpLoud.isNull());
+
+    auto tohpTreble{ juce::ImageCache::getFromMemory(BinaryData::treble_w_png,
+       BinaryData::treble_w_pngSize) };
+    if (!tohpTreble.isNull())
+        trebleImageComponent.setImage(tohpTreble, juce::RectanglePlacement::stretchToFit);
+    else
+        jassert(!tohpTreble.isNull());
+
     addAndMakeVisible(mImageComponent);
+    addAndMakeVisible(bassImageComponent);
+    addAndMakeVisible(softImageComponent);
+    addAndMakeVisible(loudImageComponent);
+    addAndMakeVisible(trebleImageComponent);
     addAndMakeVisible(volumeM);
     volumeM.setFont(Vfont);
 
@@ -46,6 +78,7 @@ MainComponent::MainComponent():BandPassFilter(juce::dsp::IIR::Coefficients<float
     button1.setRadioGroupId(volumeButtons);
     button2.setRadioGroupId(volumeButtons);
     button3.setRadioGroupId(volumeButtons);
+    
     button1.onClick = [this] {setGain(button1.getButtonText()); };
     button2.onClick = [this] {setGain(button2.getButtonText()); };
     button3.onClick = [this] {setGain(button3.getButtonText()); };
@@ -120,7 +153,7 @@ void MainComponent::getNextAudioBlock (const juce::AudioSourceChannelInfo& buffe
     // Right now we are not producing any data, in which case we need to clear the buffer
     // (to prevent the output of random noise)
 
-   
+    
     
     auto* device = deviceManager.getCurrentAudioDevice();
     auto activeInputChannels = device->getActiveInputChannels();
@@ -135,8 +168,8 @@ void MainComponent::getNextAudioBlock (const juce::AudioSourceChannelInfo& buffe
     
     auto MidFreq = (float)middlefrequency.getValue();
     auto res = (float)resonance.getValue();
+    
     Gain.setGainDecibels((float)gain);
-
     UpdateFilter();
     BandPassFilter.process(juce::dsp::ProcessContextReplacing<float>(block));
     Gain.process(juce::dsp::ProcessContextReplacing<float>(block));
@@ -166,9 +199,11 @@ void MainComponent::getNextAudioBlock (const juce::AudioSourceChannelInfo& buffe
                 
                 for (auto sample = 0; sample < bufferToFill.numSamples; ++sample)
                     outBuffer[sample] = inBuffer[sample];
+                Gain.process(juce::dsp::ProcessContextReplacing<float>(block));
             }
         }
     }
+
 
 }
 
@@ -198,7 +233,12 @@ void MainComponent::resized()
     // This is called when the MainContentComponent is resized.
     // If you add any child components, this is where you should
     // update their positions.
-    mImageComponent.setBounds(5, 10,70, 70 );
+    mImageComponent.setBounds(40, 10,70, 70 );
+    trebleImageComponent.setBounds(75, 430, 20, 20);
+    loudImageComponent.setBounds(275, 430, 20, 20);
+    bassImageComponent.setBounds(75, 660, 20, 20);
+    softImageComponent.setBounds(275, 660, 20, 20);
+   
     visualizer.setCentreRelative(0.5f, 0.5f);
     visualizer.setBounds(60, 300, 250, 80);
     middlefrequency.setBounds(70, 450, 100, 200);
@@ -242,12 +282,14 @@ double MainComponent::getlastSampleRate()
 
 void MainComponent::setGain(const juce::String& buttonName)
 {
-    if (buttonName == "Soft")
-        gain = 9.0;
-    else if (buttonName == "Medium")
-        gain = 12.0;
+    if (buttonName == "+")
+        this->gain = 6.0;
+    else if (buttonName == "++")
+        this->gain = 12.0;
     else
-        gain = 15.0;
+        this->gain = 15.0;
+
+    Gain.setGainDecibels((float)gain);
 }
 
 void MainComponent::UpdateFilter()

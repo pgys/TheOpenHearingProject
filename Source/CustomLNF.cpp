@@ -116,10 +116,10 @@ void CustomLNF::drawButtonBackground(juce::Graphics& g,
     auto cornerSize = 6.0f;
     auto bounds = button.getLocalBounds().toFloat().reduced(0.5f, 0.5f);
     
-    auto baseColour = juce::Colours::orange.withMultipliedSaturation(button.hasKeyboardFocus(true) ? 1.3f : 0.9f).withMultipliedAlpha(button.isEnabled() ? 1.0f : 0.5f);
+    auto baseColour = juce::Colours::orange.withMultipliedSaturation(button.hasKeyboardFocus(true) ? 1.3f : 0.3f).withMultipliedAlpha(button.isEnabled() ? 2.0f : 0.1f);
 
     if (shouldDrawButtonAsDown || shouldDrawButtonAsHighlighted)
-        baseColour = baseColour.contrasting(shouldDrawButtonAsDown ? 0.2f : 0.05f);
+        baseColour = baseColour.contrasting(shouldDrawButtonAsDown ? 1.0f : 0.05f);
 
     g.setColour(baseColour);
 

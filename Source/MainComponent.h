@@ -37,10 +37,10 @@ public:
         juce::dsp::IIR::Coefficients<float>>
         BandPassFilter;
     juce::dsp::Gain<float> Gain;
-    void setLastSampleRate(double sampleRate);
+    void setLastSampleRate(const double sampleRate);
     double getlastSampleRate();
 
-    double gain{ 6.0 };
+    double gain;
    
     void setGain( const juce::String& buttonName);
 
@@ -60,6 +60,10 @@ private:
     juce::Font font{};
     juce::Font Vfont{ 30.0f };
     juce::ImageComponent mImageComponent;
+    juce::ImageComponent softImageComponent;
+    juce::ImageComponent loudImageComponent;
+    juce::ImageComponent trebleImageComponent;
+    juce::ImageComponent bassImageComponent;
     juce::TextButton button1{ "+" };
     juce::TextButton button2{"++"};
     juce::TextButton button3{ "+++" };
