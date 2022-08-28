@@ -18,7 +18,7 @@ void CustomLNF::drawLinearSlider(juce::Graphics& g, int x, int y, int width, int
 {
     if (slider.isBar())
     {
-        g.setColour(slider.findColour(juce::Slider::trackColourId));
+        g.setColour(slider.findColour(0x1000e00));
         g.fillRect(slider.isHorizontal() ? juce::Rectangle<float>(static_cast<float> (x), (float)y + 0.5f, sliderPos - (float)x, (float)height - 1.0f)
             : juce::Rectangle<float>((float)x + 0.5f, sliderPos, (float)width - 1.0f, (float)y + ((float)height - sliderPos)));
     }

@@ -56,6 +56,7 @@ private:
     juce::Label volumeLabel1{ "Soft", "9db" };
     juce::Label volumeLabel2{ "Medium", "12db"};
     juce::Label volumeLabel3{ "Loud", "15db" };
+    juce::Label defaultLabel{ "Default", "Default" };
     juce::Label volumeM{ "Volume", "Volume" };
     juce::Font font{};
     juce::Font Vfont{ 30.0f };
@@ -64,6 +65,7 @@ private:
     juce::ImageComponent loudImageComponent;
     juce::ImageComponent trebleImageComponent;
     juce::ImageComponent bassImageComponent;
+    juce::ImageComponent defaultImageComponent;
     juce::TextButton button1{ "+" };
     juce::TextButton button2{"++"};
     juce::TextButton button3{ "+++" };

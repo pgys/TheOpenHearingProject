@@ -12,8 +12,6 @@ MainComponent::MainComponent():BandPassFilter(juce::dsp::IIR::Coefficients<float
     setSize (400, 400);
 
     
-
-    
     auto tohpLogo{ juce::ImageCache::getFromMemory(BinaryData::tohp_logo_pngCopy1_png,
         BinaryData::tohp_logo_pngCopy1_pngSize) };
     if (!tohpLogo.isNull())
@@ -49,11 +47,19 @@ MainComponent::MainComponent():BandPassFilter(juce::dsp::IIR::Coefficients<float
     else
         jassert(!tohpTreble.isNull());
 
+    auto tohpDefault{ juce::ImageCache::getFromMemory(BinaryData::play_png,
+        BinaryData::play_pngSize) };
+    if (!tohpDefault.isNull())
+        defaultImageComponent.setImage(tohpDefault, juce::RectanglePlacement::stretchToFit);
+    else
+        jassert(!tohpDefault.isNull());
+
     addAndMakeVisible(mImageComponent);
     addAndMakeVisible(bassImageComponent);
     addAndMakeVisible(softImageComponent);
     addAndMakeVisible(loudImageComponent);
     addAndMakeVisible(trebleImageComponent);
+    addAndMakeVisible(defaultImageComponent);
     addAndMakeVisible(volumeM);
     volumeM.setFont(Vfont);
 
@@ -65,6 +71,9 @@ MainComponent::MainComponent():BandPassFilter(juce::dsp::IIR::Coefficients<float
 
     addAndMakeVisible(volumeLabel3);
     volumeLabel3.setFont(font);
+
+    addAndMakeVisible(defaultLabel);
+    defaultLabel.setFont(font);
 
     addAndMakeVisible(button1);
     button1.setClickingTogglesState(true);
@@ -91,7 +100,9 @@ MainComponent::MainComponent():BandPassFilter(juce::dsp::IIR::Coefficients<float
     resonance.setTextBoxStyle(juce::Slider::TextBoxRight, false, 100, 20);
     resonanceLabel.setText("Resonance", juce::NotificationType::dontSendNotification);
     resonance.setSliderStyle(juce::Slider::SliderStyle::LinearVertical);
+   
 
+  
     addAndMakeVisible(middlefrequency);
     addAndMakeVisible(freqLabel);
     addAndMakeVisible(resonance);
@@ -238,15 +249,14 @@ void MainComponent::resized()
     loudImageComponent.setBounds(275, 430, 20, 20);
     bassImageComponent.setBounds(75, 660, 20, 20);
     softImageComponent.setBounds(275, 660, 20, 20);
+    defaultImageComponent.setBounds(60, 500, 10, 20);
    
     visualizer.setCentreRelative(0.5f, 0.5f);
     visualizer.setBounds(60, 300, 250, 80);
     middlefrequency.setBounds(70, 450, 100, 200);
-    //resonanceLabel.setBounds(10, 10, 90, 20);
+    middlefrequency.setNumDecimalPlacesToDisplay(0);
     resonance.setBounds(270, 450, 100, 200);
-    //volumeLabel.setBounds(10, 290, 90, 20 );
-    //volume.setBounds(10, 400, getWidth() - 190, 100);
-    //commit
+    resonance.setNumDecimalPlacesToDisplay(0);
 
     auto area = getLocalBounds().reduced(10);
     auto row = area.removeFromTop(100);
@@ -256,13 +266,12 @@ void MainComponent::resized()
     volumeLabel1.setBounds(40, 151, 100, 100);
     volumeLabel2.setBounds(180, 151, 100, 100);
     volumeLabel3.setBounds(315, 151, 100, 100);
+    defaultLabel.setBounds(10, 500, 80, 20);
     
     button1.setBounds(10,150, 120, 30);
     button2.setBounds(140, 150, 120, 30);
     button3.setBounds(270, 150, 120, 30);
-    button1.getButtonText().toUpperCase();
-    button2.getButtonText().toUpperCase();
-    button3.getButtonText().toUpperCase();
+    
 
 
     //row2 = (row.removeFromTop(row2.getHeight() + 20).reduced(5, 10));

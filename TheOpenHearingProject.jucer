@@ -13,6 +13,7 @@
             file="Source/MainComponent.cpp"/>
     </GROUP>
     <GROUP id="{139E5AC3-3B38-FB22-DF2E-FAF56EA986F9}" name="Resources">
+      <FILE id="FojszC" name="play.png" compile="0" resource="1" file="../../Downloads/play.png"/>
       <FILE id="MCrQ9B" name="treble_w.png" compile="0" resource="1" file="../../Downloads/Design Elements-20220816T054045Z-001/Design Elements/icons/treble_w.png"/>
       <FILE id="hrIzvM" name="soft_w.png" compile="0" resource="1" file="../../Downloads/Design Elements-20220816T054045Z-001/Design Elements/icons/soft_w.png"/>
       <FILE id="w8Zaqo" name="loud_w.png" compile="0" resource="1" file="../../Downloads/Design Elements-20220816T054045Z-001/Design Elements/icons/loud_w.png"/>
