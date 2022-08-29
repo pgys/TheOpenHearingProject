@@ -3329,6 +3329,7 @@
     <ClInclude Include="..\..\JuceLibraryCode\JuceHeader.h"/>
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\..\..\..\Downloads\play.png"/>
     <None Include="..\..\..\..\Downloads\Design Elements-20220816T054045Z-001\Design Elements\icons\treble_w.png"/>
     <None Include="..\..\..\..\Downloads\Design Elements-20220816T054045Z-001\Design Elements\icons\soft_w.png"/>
     <None Include="..\..\..\..\Downloads\Design Elements-20220816T054045Z-001\Design Elements\icons\loud_w.png"/>

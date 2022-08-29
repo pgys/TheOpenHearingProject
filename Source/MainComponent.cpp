@@ -102,10 +102,10 @@ MainComponent::MainComponent():BandPassFilter(juce::dsp::IIR::Coefficients<float
 
     middlefrequency.setRange(250.0, 5000.0);
     middlefrequency.setSliderStyle(juce::Slider::SliderStyle::LinearVertical);
-    middlefrequency.setTextBoxStyle(juce::Slider::TextBoxRight, false, 100, 20);
+    middlefrequency.setTextBoxStyle(juce::Slider::TextBoxRight, false, 40, 20);
     freqLabel.setText("Frequency", juce::NotificationType::dontSendNotification);
     resonance.setRange(2.0, 5.0);
-    resonance.setTextBoxStyle(juce::Slider::TextBoxRight, false, 100, 20);
+    resonance.setTextBoxStyle(juce::Slider::TextBoxRight, false, 40, 20);
     resonanceLabel.setText("Resonance", juce::NotificationType::dontSendNotification);
     resonance.setSliderStyle(juce::Slider::SliderStyle::LinearVertical);
    
@@ -258,13 +258,13 @@ void MainComponent::resized()
     bassImageComponent.setBounds(75, 660, 20, 20);
     softImageComponent.setBounds(275, 660, 20, 20);
     defaultImageComponent.setBounds(60, 500, 10, 20);
-    defaultResonanceImageComponent.setBounds(250, 500, 10, 20);
+    defaultResonanceImageComponent.setBounds(250, 550, 10, 20);
    
     visualizer.setCentreRelative(0.5f, 0.5f);
     visualizer.setBounds(60, 300, 250, 80);
-    middlefrequency.setBounds(70, 450, 100, 200);
+    middlefrequency.setBounds(55, 450, 100, 200);
     middlefrequency.setNumDecimalPlacesToDisplay(0);
-    resonance.setBounds(270, 450, 100, 200);
+    resonance.setBounds(255, 450, 100, 200);
     resonance.setNumDecimalPlacesToDisplay(0);
 
     auto area = getLocalBounds().reduced(10);

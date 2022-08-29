@@ -39,6 +39,7 @@ add_library( ${BINARY_NAME}
     "../../../Source/Main.cpp"
     "../../../Source/MainComponent.h"
     "../../../Source/MainComponent.cpp"
+    "../../../../../Downloads/play.png"
     "../../../../../Downloads/Design Elements-20220816T054045Z-001/Design Elements/icons/treble_w.png"
     "../../../../../Downloads/Design Elements-20220816T054045Z-001/Design Elements/icons/soft_w.png"
     "../../../../../Downloads/Design Elements-20220816T054045Z-001/Design Elements/icons/loud_w.png"
@@ -1800,6 +1801,7 @@ add_library( ${BINARY_NAME}
 set_source_files_properties(
     "../../../Source/CustomLNF.h"
     "../../../Source/MainComponent.h"
+    "../../../../../Downloads/play.png"
     "../../../../../Downloads/Design Elements-20220816T054045Z-001/Design Elements/icons/treble_w.png"
     "../../../../../Downloads/Design Elements-20220816T054045Z-001/Design Elements/icons/soft_w.png"
     "../../../../../Downloads/Design Elements-20220816T054045Z-001/Design Elements/icons/loud_w.png"
