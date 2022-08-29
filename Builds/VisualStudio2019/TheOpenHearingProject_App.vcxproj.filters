@@ -5813,19 +5813,19 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\..\..\Downloads\play.png">
+    <None Include="..\..\Resources\loud_w.png">
       <Filter>TheOpenHearingProject\Resources</Filter>
     </None>
-    <None Include="..\..\..\..\Downloads\Design Elements-20220816T054045Z-001\Design Elements\icons\treble_w.png">
+    <None Include="..\..\Resources\soft_w.png">
       <Filter>TheOpenHearingProject\Resources</Filter>
     </None>
-    <None Include="..\..\..\..\Downloads\Design Elements-20220816T054045Z-001\Design Elements\icons\soft_w.png">
+    <None Include="..\..\Resources\treble_w.png">
       <Filter>TheOpenHearingProject\Resources</Filter>
     </None>
-    <None Include="..\..\..\..\Downloads\Design Elements-20220816T054045Z-001\Design Elements\icons\loud_w.png">
+    <None Include="..\..\Resources\play.png">
       <Filter>TheOpenHearingProject\Resources</Filter>
     </None>
-    <None Include="..\..\..\..\Downloads\Design Elements-20220816T054045Z-001\Design Elements\icons\bass_w.png">
+    <None Include="..\..\Resources\bass_w.png">
       <Filter>TheOpenHearingProject\Resources</Filter>
     </None>
     <None Include="..\..\Resources\tohp_logo.pngCopy-1.png">
