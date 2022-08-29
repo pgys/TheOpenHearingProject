@@ -18,7 +18,7 @@ namespace BinaryData
     const int            treble_w_pngSize = 24020;
 
     extern const char*   play_png;
-    const int            play_pngSize = 13898;
+    const int            play_pngSize = 14359;
 
     extern const char*   bass_w_png;
     const int            bass_w_pngSize = 1615;

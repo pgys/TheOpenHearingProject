@@ -33,12 +33,19 @@ public:
     //==============================================================================
     void paint (juce::Graphics& g) override;
     void resized() override;
+
+    //Bandpass Filter instance
     juce::dsp::ProcessorDuplicator<juce::dsp::IIR::Filter<float>,
         juce::dsp::IIR::Coefficients<float>>
         BandPassFilter;
+
+    //Gain Instance
     juce::dsp::Gain<float> Gain;
+
+    //Member getter and setter functions
     void setLastSampleRate(const double sampleRate);
-    double getlastSampleRate();
+    double getlastSampleRate ()const;
+
 
     double gain;
    
@@ -47,19 +54,26 @@ public:
 private:
     //==============================================================================
     // Your private member variables go here...
-    
+    // 
+    //labels
     juce::Label freqLabel;
     juce::Label resonanceLabel;
-    juce::Slider middlefrequency;
-    juce::Slider resonance;
-    juce::Slider volume;
     juce::Label volumeLabel1{ "Soft", "6db" };
-    juce::Label volumeLabel2{ "Medium", "12db"};
+    juce::Label volumeLabel2{ "Medium", "12db" };
     juce::Label volumeLabel3{ "Loud", "16db" };
     juce::Label defaultLabel{ "Default", "Default" };
     juce::Label volumeM{ "Volume", "Volume" };
+
+    //Sliders
+    juce::Slider middlefrequency;
+    juce::Slider resonance;
+    juce::Slider volume;
+    
+    //Label fonts
     juce::Font font{};
     juce::Font Vfont{ 30.0f };
+
+    //Image Components
     juce::ImageComponent mImageComponent;
     juce::ImageComponent softImageComponent;
     juce::ImageComponent loudImageComponent;
@@ -67,24 +81,31 @@ private:
     juce::ImageComponent bassImageComponent;
     juce::ImageComponent defaultImageComponent;
     juce::ImageComponent defaultResonanceImageComponent;
+
+    //Buttons
     juce::TextButton button1{ "+" };
     juce::TextButton button2{"++"};
     juce::TextButton button3{ "+++" };
+
+    //sampleRate
     double sampleRate{ 44100 };
-    Visualizer visualizer;
+   
+
+protected:
+    //update bandpass filter
+    void UpdateFilter();
+
     //RadioGroup for volume buttons
     enum radioId {
         volumeButtons = 100
     };
 
+    //GUI visualizer
+    Visualizer visualizer;
+
+    //JUCE Look and Feel class override
     CustomLNF customLNF;
     
-    void UpdateFilter();
-    
-
-
-    std::atomic<double> value;
-    std::atomic<double> resValue;
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MainComponent)
 };
  

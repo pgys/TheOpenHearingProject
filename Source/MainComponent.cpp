@@ -11,6 +11,8 @@ MainComponent::MainComponent():BandPassFilter(juce::dsp::IIR::Coefficients<float
     juce::LookAndFeel::setDefaultLookAndFeel(&customLNF);
     setSize (400, 400);
 
+
+    //get image from binary dataand set image component
     
     auto tohpLogo{ juce::ImageCache::getFromMemory(BinaryData::tohp_logo_pngCopy1_png,
         BinaryData::tohp_logo_pngCopy1_pngSize) };
@@ -61,6 +63,8 @@ MainComponent::MainComponent():BandPassFilter(juce::dsp::IIR::Coefficients<float
     else
         jassert(!tohpResonanceDefault.isNull());
 
+
+    //add image components and make them visible
     addAndMakeVisible(mImageComponent);
     addAndMakeVisible(bassImageComponent);
     addAndMakeVisible(softImageComponent);
@@ -68,6 +72,10 @@ MainComponent::MainComponent():BandPassFilter(juce::dsp::IIR::Coefficients<float
     addAndMakeVisible(trebleImageComponent);
     addAndMakeVisible(defaultImageComponent);
     addAndMakeVisible(defaultResonanceImageComponent);
+
+    //add other components, make them visible and set their initial states 
+    //and features if necessary
+
     addAndMakeVisible(volumeM);
     volumeM.setFont(Vfont);
 
@@ -92,32 +100,39 @@ MainComponent::MainComponent():BandPassFilter(juce::dsp::IIR::Coefficients<float
     addAndMakeVisible(button3);
     button3.setClickingTogglesState(true);
 
+    addAndMakeVisible(middlefrequency);
+    middlefrequency.setRange(250.0, 5000.0);
+    middlefrequency.setSliderStyle(juce::Slider::SliderStyle::LinearVertical);
+    middlefrequency.setTextBoxStyle(juce::Slider::TextBoxRight, false, 40, 20);
+    middlefrequency.setNumDecimalPlacesToDisplay(0);
+
+    addAndMakeVisible(freqLabel);
+    freqLabel.setText("Frequency", juce::NotificationType::dontSendNotification);
+
+    addAndMakeVisible(resonance);
+    resonance.setRange(2.0, 5.0);
+    resonance.setTextBoxStyle(juce::Slider::TextBoxRight, false, 40, 20);
+    resonance.setSliderStyle(juce::Slider::SliderStyle::LinearVertical);
+    resonance.setNumDecimalPlacesToDisplay(0);
+
+    addAndMakeVisible(resonanceLabel);
+    resonanceLabel.setText("Resonance", juce::NotificationType::dontSendNotification);
+
+
+    addAndMakeVisible(visualizer);
+
+    //create radio group for button group effect
+
     button1.setRadioGroupId(volumeButtons);
     button2.setRadioGroupId(volumeButtons);
     button3.setRadioGroupId(volumeButtons);
-    
+
+    //set on click event callback function
     button1.onClick = [this] {setGain(button1.getButtonText()); };
     button2.onClick = [this] {setGain(button2.getButtonText()); };
     button3.onClick = [this] {setGain(button3.getButtonText()); };
 
-    middlefrequency.setRange(250.0, 5000.0);
-    middlefrequency.setSliderStyle(juce::Slider::SliderStyle::LinearVertical);
-    middlefrequency.setTextBoxStyle(juce::Slider::TextBoxRight, false, 40, 20);
-    freqLabel.setText("Frequency", juce::NotificationType::dontSendNotification);
-    resonance.setRange(2.0, 5.0);
-    resonance.setTextBoxStyle(juce::Slider::TextBoxRight, false, 40, 20);
-    resonanceLabel.setText("Resonance", juce::NotificationType::dontSendNotification);
-    resonance.setSliderStyle(juce::Slider::SliderStyle::LinearVertical);
    
-
-  
-    addAndMakeVisible(middlefrequency);
-    addAndMakeVisible(freqLabel);
-    addAndMakeVisible(resonance);
-    addAndMakeVisible(resonanceLabel);
-    addAndMakeVisible(visualizer);
-
-    
 
     // Some platforms require permissions to open input channels so request that here
     if (juce::RuntimePermissions::isRequired (juce::RuntimePermissions::recordAudio)
@@ -152,14 +167,22 @@ void MainComponent::prepareToPlay(int samplesPerBlockExpected, double sampleRate
 
     // For more details, see the help for AudioProcessor::prepareToPlay()
     juce::dsp::ProcessSpec spec;
+
+    //set maximum block size, sample rate, number channels and last sample rate
     spec.maximumBlockSize = samplesPerBlockExpected;
     spec.sampleRate = sampleRate;
     spec.numChannels = 2;
     setLastSampleRate(sampleRate);
-    BandPassFilter.prepare(spec);
-    Gain.prepare(spec);
+
+    //reset instances of the bandpass filter and the amplifier(Gain)
     BandPassFilter.reset();
     Gain.reset();
+
+    //prepare instances of the bandpass filter and the amplifier(Gain)
+    BandPassFilter.prepare(spec);
+    Gain.prepare(spec);
+
+   //clear the visualizer before next display
     visualizer.clear();
 }
 
@@ -185,13 +208,19 @@ void MainComponent::getNextAudioBlock (const juce::AudioSourceChannelInfo& buffe
         bufferToFill.startSample,
         bufferToFill.numSamples);
     
-    auto MidFreq = (float)middlefrequency.getValue();
-    auto res = (float)resonance.getValue();
+   
     
+    // set the gain level
     Gain.setGainDecibels((float)gain);
+
+    //get the mid frequency and resonance values and set the bandpass filter parameters
     UpdateFilter();
+
+    //apply the bandpass filter and input amplification to the audio data.
     BandPassFilter.process(juce::dsp::ProcessContextReplacing<float>(block));
     Gain.process(juce::dsp::ProcessContextReplacing<float>(block));
+    
+    //push the processed data to the visualizer
     visualizer.pushBuffer(bufferToFill);
 
     for (auto channel = 0; channel < maxOutputChannels; ++channel)
@@ -218,6 +247,8 @@ void MainComponent::getNextAudioBlock (const juce::AudioSourceChannelInfo& buffe
                 
                 for (auto sample = 0; sample < bufferToFill.numSamples; ++sample)
                     outBuffer[sample] = inBuffer[sample];
+
+                //apply output amplification
                 Gain.process(juce::dsp::ProcessContextReplacing<float>(block));
             }
         }
@@ -252,39 +283,27 @@ void MainComponent::resized()
     // This is called when the MainContentComponent is resized.
     // If you add any child components, this is where you should
     // update their positions.
+
+    //set bounds of the GUI components
     mImageComponent.setBounds(40, 10,70, 70 );
     trebleImageComponent.setBounds(75, 430, 20, 20);
     loudImageComponent.setBounds(275, 430, 20, 20);
     bassImageComponent.setBounds(75, 660, 20, 20);
     softImageComponent.setBounds(275, 660, 20, 20);
     defaultImageComponent.setBounds(60, 500, 10, 20);
-    defaultResonanceImageComponent.setBounds(250, 550, 10, 20);
-   
+    defaultResonanceImageComponent.setBounds(260, 550, 10, 20);
     visualizer.setCentreRelative(0.5f, 0.5f);
     visualizer.setBounds(60, 300, 250, 80);
     middlefrequency.setBounds(55, 450, 100, 200);
-    middlefrequency.setNumDecimalPlacesToDisplay(0);
     resonance.setBounds(255, 450, 100, 200);
-    resonance.setNumDecimalPlacesToDisplay(0);
-
-    auto area = getLocalBounds().reduced(10);
-    auto row = area.removeFromTop(100);
-
     volumeM.setBounds(140, -30, 300, 300);
-    
     volumeLabel1.setBounds(40, 151, 100, 100);
     volumeLabel2.setBounds(180, 151, 100, 100);
     volumeLabel3.setBounds(315, 151, 100, 100);
     defaultLabel.setBounds(10, 500, 80, 20);
-    
     button1.setBounds(10,150, 120, 30);
     button2.setBounds(140, 150, 120, 30);
     button3.setBounds(270, 150, 120, 30);
-    
-
-
-    //row2 = (row.removeFromTop(row2.getHeight() + 20).reduced(5, 10));
-
 }
 
 void MainComponent::setLastSampleRate(double sampleRate)
@@ -292,7 +311,7 @@ void MainComponent::setLastSampleRate(double sampleRate)
     this->sampleRate = sampleRate;
 }
 
-double MainComponent::getlastSampleRate()
+double MainComponent::getlastSampleRate() const
 {
     return sampleRate;
 }
@@ -312,14 +331,18 @@ void MainComponent::setGain(const juce::String& buttonName)
 
 void MainComponent::UpdateFilter()
 {
+    //get the values of the sliders from the gui
     auto MidFreq = (float)middlefrequency.getValue();
     auto res = (float)resonance.getValue();
     
+    //updates the bandpassfilter
     if(MidFreq > 0 && res > 0)
         *BandPassFilter.state = *juce::dsp::IIR::Coefficients<float>::makeBandPass(getlastSampleRate(), MidFreq, res);
    
 }
 
+
+/*set the parameters for the GUI waveform visualizer*/
 Visualizer::Visualizer():AudioVisualiserComponent{2}
 {
     setBufferSize(1028);
