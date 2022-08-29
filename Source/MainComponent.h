@@ -53,9 +53,9 @@ private:
     juce::Slider middlefrequency;
     juce::Slider resonance;
     juce::Slider volume;
-    juce::Label volumeLabel1{ "Soft", "9db" };
+    juce::Label volumeLabel1{ "Soft", "6db" };
     juce::Label volumeLabel2{ "Medium", "12db"};
-    juce::Label volumeLabel3{ "Loud", "15db" };
+    juce::Label volumeLabel3{ "Loud", "16db" };
     juce::Label defaultLabel{ "Default", "Default" };
     juce::Label volumeM{ "Volume", "Volume" };
     juce::Font font{};
@@ -66,6 +66,7 @@ private:
     juce::ImageComponent trebleImageComponent;
     juce::ImageComponent bassImageComponent;
     juce::ImageComponent defaultImageComponent;
+    juce::ImageComponent defaultResonanceImageComponent;
     juce::TextButton button1{ "+" };
     juce::TextButton button2{"++"};
     juce::TextButton button3{ "+++" };

@@ -54,12 +54,20 @@ MainComponent::MainComponent():BandPassFilter(juce::dsp::IIR::Coefficients<float
     else
         jassert(!tohpDefault.isNull());
 
+    auto tohpResonanceDefault{ juce::ImageCache::getFromMemory(BinaryData::play_png,
+       BinaryData::play_pngSize) };
+    if (!tohpResonanceDefault.isNull())
+        defaultResonanceImageComponent.setImage(tohpResonanceDefault, juce::RectanglePlacement::stretchToFit);
+    else
+        jassert(!tohpResonanceDefault.isNull());
+
     addAndMakeVisible(mImageComponent);
     addAndMakeVisible(bassImageComponent);
     addAndMakeVisible(softImageComponent);
     addAndMakeVisible(loudImageComponent);
     addAndMakeVisible(trebleImageComponent);
     addAndMakeVisible(defaultImageComponent);
+    addAndMakeVisible(defaultResonanceImageComponent);
     addAndMakeVisible(volumeM);
     volumeM.setFont(Vfont);
 
@@ -250,6 +258,7 @@ void MainComponent::resized()
     bassImageComponent.setBounds(75, 660, 20, 20);
     softImageComponent.setBounds(275, 660, 20, 20);
     defaultImageComponent.setBounds(60, 500, 10, 20);
+    defaultResonanceImageComponent.setBounds(250, 500, 10, 20);
    
     visualizer.setCentreRelative(0.5f, 0.5f);
     visualizer.setBounds(60, 300, 250, 80);
@@ -296,7 +305,7 @@ void MainComponent::setGain(const juce::String& buttonName)
     else if (buttonName == "++")
         this->gain = 12.0;
     else
-        this->gain = 15.0;
+        this->gain = 16.0;
 
     Gain.setGainDecibels((float)gain);
 }
