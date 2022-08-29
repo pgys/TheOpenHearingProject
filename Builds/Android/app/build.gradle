@@ -1,7 +1,7 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 30
+    compileSdkVersion 31
     externalNativeBuild {
         cmake {
             path "CMakeLists.txt"
@@ -20,7 +20,7 @@ android {
     defaultConfig {
         applicationId "com.yourcompany.theopenhearingproject"
         minSdkVersion    16
-        targetSdkVersion 30
+        targetSdkVersion 31
         externalNativeBuild {
             cmake {
                 arguments "-DANDROID_TOOLCHAIN=clang", "-DANDROID_PLATFORM=android-16", "-DANDROID_STL=c++_static", "-DANDROID_CPP_FEATURES=exceptions rtti", "-DANDROID_ARM_MODE=arm", "-DANDROID_ARM_NEON=TRUE", "-DCMAKE_CXX_STANDARD=14", "-DCMAKE_CXX_EXTENSIONS=OFF"
@@ -82,9 +82,9 @@ android {
 
     sourceSets {
         main.java.srcDirs +=
-            ["../../../../JUCE/JUCE/modules/juce_core/native/javacore/init",
-             "../../../../JUCE/JUCE/modules/juce_core/native/javacore/app",
-             "../../../../JUCE/JUCE/modules/juce_gui_basics/native/javaopt/app"]
+            ["../../../../../Documents/JUCE/modules/juce_core/native/javacore/init",
+             "../../../../../Documents/JUCE/modules/juce_core/native/javacore/app",
+             "../../../../../Documents/JUCE/modules/juce_gui_basics/native/javaopt/app"]
 
         main.res.srcDirs +=
             []

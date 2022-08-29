@@ -8,11 +8,23 @@
 
 namespace BinaryData
 {
+    extern const char*   treble_w_png;
+    const int            treble_w_pngSize = 24020;
+
+    extern const char*   soft_w_png;
+    const int            soft_w_pngSize = 10190;
+
+    extern const char*   loud_w_png;
+    const int            loud_w_pngSize = 18951;
+
+    extern const char*   bass_w_png;
+    const int            bass_w_pngSize = 1615;
+
     extern const char*   tohp_logo_pngCopy1_png;
     const int            tohp_logo_pngCopy1_pngSize = 14736;
 
     // Number of elements in the namedResourceList and originalFileNames arrays.
-    const int namedResourceListSize = 1;
+    const int namedResourceListSize = 5;
 
     // Points to the start of a list of resource names.
     extern const char* namedResourceList[];
