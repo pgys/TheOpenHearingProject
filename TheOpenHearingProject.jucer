@@ -13,11 +13,11 @@
             file="Source/MainComponent.cpp"/>
     </GROUP>
     <GROUP id="{139E5AC3-3B38-FB22-DF2E-FAF56EA986F9}" name="Resources">
-      <FILE id="FojszC" name="play.png" compile="0" resource="1" file="../../Downloads/play.png"/>
-      <FILE id="MCrQ9B" name="treble_w.png" compile="0" resource="1" file="../../Downloads/Design Elements-20220816T054045Z-001/Design Elements/icons/treble_w.png"/>
-      <FILE id="hrIzvM" name="soft_w.png" compile="0" resource="1" file="../../Downloads/Design Elements-20220816T054045Z-001/Design Elements/icons/soft_w.png"/>
-      <FILE id="w8Zaqo" name="loud_w.png" compile="0" resource="1" file="../../Downloads/Design Elements-20220816T054045Z-001/Design Elements/icons/loud_w.png"/>
-      <FILE id="Gzghbv" name="bass_w.png" compile="0" resource="1" file="../../Downloads/Design Elements-20220816T054045Z-001/Design Elements/icons/bass_w.png"/>
+      <FILE id="kCdJxP" name="loud_w.png" compile="0" resource="1" file="Resources/loud_w.png"/>
+      <FILE id="I3rEd3" name="soft_w.png" compile="0" resource="1" file="Resources/soft_w.png"/>
+      <FILE id="kywhb9" name="treble_w.png" compile="0" resource="1" file="Resources/treble_w.png"/>
+      <FILE id="Z7MaCw" name="play.png" compile="0" resource="1" file="Resources/play.png"/>
+      <FILE id="MkQbcQ" name="bass_w.png" compile="0" resource="1" file="Resources/bass_w.png"/>
       <FILE id="J8j75S" name="tohp_logo.pngCopy-1.png" compile="0" resource="1"
             file="Resources/tohp_logo.pngCopy-1.png"/>
     </GROUP>
@@ -30,18 +30,18 @@
         <CONFIGURATION isDebug="0" name="Release" targetName="LikeToHear_Prototype"/>
       </CONFIGURATIONS>
       <MODULEPATHS>
-        <MODULEPATH id="juce_audio_basics" path="../../../../Desktop/JUCE/JUCE/modules"/>
-        <MODULEPATH id="juce_audio_devices" path="../../../../Desktop/JUCE/JUCE/modules"/>
-        <MODULEPATH id="juce_audio_formats" path="../../../../Desktop/JUCE/JUCE/modules"/>
         <MODULEPATH id="juce_audio_processors" path="../../../../Desktop/JUCE/JUCE/modules"/>
-        <MODULEPATH id="juce_audio_utils" path="../../../../Desktop/JUCE/JUCE/modules"/>
-        <MODULEPATH id="juce_core" path="../../../../Desktop/JUCE/JUCE/modules"/>
-        <MODULEPATH id="juce_data_structures" path="../../../../Desktop/JUCE/JUCE/modules"/>
-        <MODULEPATH id="juce_events" path="../../../../Desktop/JUCE/JUCE/modules"/>
-        <MODULEPATH id="juce_graphics" path="../../../../Desktop/JUCE/JUCE/modules"/>
-        <MODULEPATH id="juce_gui_basics" path="../../../../Desktop/JUCE/JUCE/modules"/>
-        <MODULEPATH id="juce_gui_extra" path="../../../../Desktop/JUCE/JUCE/modules"/>
-        <MODULEPATH id="juce_dsp" path="../../../../Desktop/JUCE/JUCE/modules"/>
+        <MODULEPATH id="juce_gui_basics" path="../../Documents/JUCE/modules"/>
+        <MODULEPATH id="juce_gui_extra" path="../../Documents/JUCE/modules"/>
+        <MODULEPATH id="juce_graphics" path="../../Documents/JUCE/modules"/>
+        <MODULEPATH id="juce_core" path="../../Documents/JUCE/modules"/>
+        <MODULEPATH id="juce_audio_devices" path="../../Documents/JUCE/modules"/>
+        <MODULEPATH id="juce_dsp" path="../../Documents/JUCE/modules"/>
+        <MODULEPATH id="juce_audio_formats" path="../../Documents/JUCE/modules"/>
+        <MODULEPATH id="juce_events" path="../../Documents/JUCE/modules"/>
+        <MODULEPATH id="juce_audio_basics" path="../../Documents/JUCE/modules"/>
+        <MODULEPATH id="juce_audio_utils" path="../../Documents/JUCE/modules"/>
+        <MODULEPATH id="juce_data_structures" path="../../Documents/JUCE/modules"/>
       </MODULEPATHS>
     </VS2022>
     <ANDROIDSTUDIO targetFolder="Builds/Android" microphonePermissionNeeded="1"
@@ -51,18 +51,18 @@
         <CONFIGURATION isDebug="0" name="Release"/>
       </CONFIGURATIONS>
       <MODULEPATHS>
-        <MODULEPATH id="juce_audio_basics" path="C:\Users\RAZER BLADE\Desktop\JUCE\JUCE\modules"/>
-        <MODULEPATH id="juce_audio_devices" path="C:\Users\RAZER BLADE\Desktop\JUCE\JUCE\modules"/>
-        <MODULEPATH id="juce_audio_formats" path="C:\Users\RAZER BLADE\Desktop\JUCE\JUCE\modules"/>
         <MODULEPATH id="juce_audio_processors" path="C:\Users\RAZER BLADE\Desktop\JUCE\JUCE\modules"/>
-        <MODULEPATH id="juce_audio_utils" path="C:\Users\RAZER BLADE\Desktop\JUCE\JUCE\modules"/>
-        <MODULEPATH id="juce_core" path="C:\Users\RAZER BLADE\Desktop\JUCE\JUCE\modules"/>
-        <MODULEPATH id="juce_data_structures" path="C:\Users\RAZER BLADE\Desktop\JUCE\JUCE\modules"/>
-        <MODULEPATH id="juce_dsp" path="C:\Users\RAZER BLADE\Desktop\JUCE\JUCE\modules"/>
-        <MODULEPATH id="juce_events" path="C:\Users\RAZER BLADE\Desktop\JUCE\JUCE\modules"/>
-        <MODULEPATH id="juce_graphics" path="C:\Users\RAZER BLADE\Desktop\JUCE\JUCE\modules"/>
-        <MODULEPATH id="juce_gui_basics" path="C:\Users\RAZER BLADE\Desktop\JUCE\JUCE\modules"/>
-        <MODULEPATH id="juce_gui_extra" path="C:\Users\RAZER BLADE\Desktop\JUCE\JUCE\modules"/>
+        <MODULEPATH id="juce_gui_basics" path="../../Documents/JUCE/modules"/>
+        <MODULEPATH id="juce_gui_extra" path="../../Documents/JUCE/modules"/>
+        <MODULEPATH id="juce_graphics" path="../../Documents/JUCE/modules"/>
+        <MODULEPATH id="juce_core" path="../../Documents/JUCE/modules"/>
+        <MODULEPATH id="juce_audio_devices" path="../../Documents/JUCE/modules"/>
+        <MODULEPATH id="juce_dsp" path="../../Documents/JUCE/modules"/>
+        <MODULEPATH id="juce_audio_formats" path="../../Documents/JUCE/modules"/>
+        <MODULEPATH id="juce_events" path="../../Documents/JUCE/modules"/>
+        <MODULEPATH id="juce_audio_basics" path="../../Documents/JUCE/modules"/>
+        <MODULEPATH id="juce_audio_utils" path="../../Documents/JUCE/modules"/>
+        <MODULEPATH id="juce_data_structures" path="../../Documents/JUCE/modules"/>
       </MODULEPATHS>
     </ANDROIDSTUDIO>
     <VS2019 targetFolder="Builds/VisualStudio2019">
@@ -71,18 +71,18 @@
         <CONFIGURATION isDebug="0" name="Release"/>
       </CONFIGURATIONS>
       <MODULEPATHS>
-        <MODULEPATH id="juce_audio_basics" path="C:\Users\RAZER BLADE\Desktop\JUCE\JUCE\modules"/>
-        <MODULEPATH id="juce_audio_devices" path="C:\Users\RAZER BLADE\Desktop\JUCE\JUCE\modules"/>
-        <MODULEPATH id="juce_audio_formats" path="C:\Users\RAZER BLADE\Desktop\JUCE\JUCE\modules"/>
         <MODULEPATH id="juce_audio_processors" path="C:\Users\RAZER BLADE\Desktop\JUCE\JUCE\modules"/>
-        <MODULEPATH id="juce_audio_utils" path="C:\Users\RAZER BLADE\Desktop\JUCE\JUCE\modules"/>
-        <MODULEPATH id="juce_core" path="C:\Users\RAZER BLADE\Desktop\JUCE\JUCE\modules"/>
-        <MODULEPATH id="juce_data_structures" path="C:\Users\RAZER BLADE\Desktop\JUCE\JUCE\modules"/>
-        <MODULEPATH id="juce_dsp" path="C:\Users\RAZER BLADE\Desktop\JUCE\JUCE\modules"/>
-        <MODULEPATH id="juce_events" path="C:\Users\RAZER BLADE\Desktop\JUCE\JUCE\modules"/>
-        <MODULEPATH id="juce_graphics" path="C:\Users\RAZER BLADE\Desktop\JUCE\JUCE\modules"/>
-        <MODULEPATH id="juce_gui_basics" path="C:\Users\RAZER BLADE\Desktop\JUCE\JUCE\modules"/>
-        <MODULEPATH id="juce_gui_extra" path="C:\Users\RAZER BLADE\Desktop\JUCE\JUCE\modules"/>
+        <MODULEPATH id="juce_gui_basics" path="../../Documents/JUCE/modules"/>
+        <MODULEPATH id="juce_gui_extra" path="../../Documents/JUCE/modules"/>
+        <MODULEPATH id="juce_graphics" path="../../Documents/JUCE/modules"/>
+        <MODULEPATH id="juce_core" path="../../Documents/JUCE/modules"/>
+        <MODULEPATH id="juce_audio_devices" path="../../Documents/JUCE/modules"/>
+        <MODULEPATH id="juce_dsp" path="../../Documents/JUCE/modules"/>
+        <MODULEPATH id="juce_audio_formats" path="../../Documents/JUCE/modules"/>
+        <MODULEPATH id="juce_events" path="../../Documents/JUCE/modules"/>
+        <MODULEPATH id="juce_audio_basics" path="../../Documents/JUCE/modules"/>
+        <MODULEPATH id="juce_audio_utils" path="../../Documents/JUCE/modules"/>
+        <MODULEPATH id="juce_data_structures" path="../../Documents/JUCE/modules"/>
       </MODULEPATHS>
     </VS2019>
   </EXPORTFORMATS>

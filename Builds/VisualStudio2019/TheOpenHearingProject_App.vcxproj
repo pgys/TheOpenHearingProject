@@ -3329,11 +3329,11 @@
     <ClInclude Include="..\..\JuceLibraryCode\JuceHeader.h"/>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\..\..\Downloads\play.png"/>
-    <None Include="..\..\..\..\Downloads\Design Elements-20220816T054045Z-001\Design Elements\icons\treble_w.png"/>
-    <None Include="..\..\..\..\Downloads\Design Elements-20220816T054045Z-001\Design Elements\icons\soft_w.png"/>
-    <None Include="..\..\..\..\Downloads\Design Elements-20220816T054045Z-001\Design Elements\icons\loud_w.png"/>
-    <None Include="..\..\..\..\Downloads\Design Elements-20220816T054045Z-001\Design Elements\icons\bass_w.png"/>
+    <None Include="..\..\Resources\loud_w.png"/>
+    <None Include="..\..\Resources\soft_w.png"/>
+    <None Include="..\..\Resources\treble_w.png"/>
+    <None Include="..\..\Resources\play.png"/>
+    <None Include="..\..\Resources\bass_w.png"/>
     <None Include="..\..\Resources\tohp_logo.pngCopy-1.png"/>
     <None Include="..\..\..\..\Documents\JUCE\modules\juce_audio_devices\native\oboe\CMakeLists.txt"/>
     <None Include="..\..\..\..\Documents\JUCE\modules\juce_audio_devices\native\oboe\README.md"/>
