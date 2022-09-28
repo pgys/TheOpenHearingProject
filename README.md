@@ -7,12 +7,12 @@ To test the TOHP-app prototype code, we recomment the following procedure:
 
 1. Install projucer
 
-To install and learn some basic about how to use the projucer, follow [the projucer tutorial] ( https://docs.juce.com/master/tutorial_new_projucer_project.html/) Start with creating an audio application.
+To install and learn some basic about how to use the projucer, follow [the projucer tutorial]( https://docs.juce.com/master/tutorial_new_projucer_project.html/) Start with creating an audio application.
 
 
 2. Install Android Studio
 
-In order to install Android Studio, follow the [Android Studio instruction] (https://developer.android.com/studio)
+In order to install Android Studio, follow the [Android Studio instruction](https://developer.android.com/studio)
 
 3. Compile the code and start the TOHP-app prototype on your Android smartphone
 
