@@ -1,13 +1,13 @@
 # TheOpenHearingProject App Prototype (TOHP-App Prototype)
 Basic Prototype of Customizable Android App for Hearing Support
 
-This repository contains the code for a basic prototype for an Android smartphone app with customizable sound which is recorded by the microphone of the smartphone. The app allows the user to adjust frequency, resonance and gain. The TOHP-App code is developed with the use of the JUCE framework (projucer) and Android Studio. 
+This repository contains the code for a basic prototype for an Android smartphone app with customizable sound which is recorded by the microphone of the smartphone. The app allows the user to adjust frequency, resonance and gain. The TOHP-App code is developed with the use of the JUCE framework (Projucer) and Android Studio. 
 
 To test the TOHP-app prototype code, we recomment the following procedure: 
 
-1. Install projucer
+1. Install Projucer
 
-To install and learn some basic about how to use the projucer, follow [the projucer tutorial]( https://docs.juce.com/master/tutorial_new_projucer_project.html/) Start with creating an audio application.
+To install and learn some basic about how to use the Projucer, follow [the Projucer tutorial]( https://docs.juce.com/master/tutorial_new_projucer_project.html/) Start with creating an audio application.
 
 
 2. Install Android Studio
