@@ -16,8 +16,7 @@ In order to install Android Studio, follow the [Android Studio instruction](http
 
 3. Compile the code and start the TOHP-app prototype on your Android smartphone
 
-Download the code of this project load it as a project into the projucer (File/open). Then select the export option "Android" and activate it. Android studio will be opened. You can use an Android smartphone to test the code. The Android smartphone has to be in developer mode. Look up for your model in the settings to change to the developer mode and connect it to your laptop. Android Studio should recognize your smart phone as device and you should be able to transfer the code to your smartphone. This takes a while before before the app opens automatically. 
+Download the code of this project load it as a project into the projucer (File/open). Then select the export option "Android" and activate it. Android studio will be opened. You can use an Android smartphone to test the code. The Android smartphone has to be in developer mode. Look up for your model in the settings to change to inthe developer mode and connect it to your laptop. Android Studio should recognize your smart phone as device and you should be able to transfer the code to your smartphone. This takes a while before before the app opens automatically. 
 
 The code of this repository currently being revised. The new code will be released in another project repository which will be announced here. 
 Stay tuned!
- 
