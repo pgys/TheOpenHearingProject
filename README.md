@@ -1,7 +1,7 @@
 # TheOpenHearingProject App Prototype (TOHP-App Prototype)
 Basic Prototype of Customizable App for Hearing Support
 
-This repository contains the code for a basic prototype for an Android or iOS smartphone app with customizable sound which is recorded by the microphone of the smartphone. The app allows the user to adjust frequency, resonance and gain. The TOHP-App code is developed with the use of the [JUCE](https://juce.com/), a C++-application framework, which is partly open source and cross-platform (Windows, macOS, iOS, Linux, Android). Here we describe the compilation process for Android with [Android Studio](https://developer.android.com/studio).
+This repository contains the code for a basic prototype for an Android or iOS smartphone app with customizable sound which is recorded by the microphone of the smartphone. The app allows the user to adjust frequency, resonance and gain. The TOHP-App code is developed with the use of the [JUCE](https://juce.com/), a C++-application framework, which is partly open source and cross-platform (Windows, macOS, iOS, Linux, Android). Here we describe exemplary the compilation process for Android with [Android Studio](https://developer.android.com/studio).
 
 To test the TOHP-app prototype code, we recomment the following procedure: 
 
