@@ -1,7 +1,8 @@
 #include "MainComponent.h"
 #include <JuceHeader.h>
 
-
+/** Global variable for the visualizer constructor */
+int visualizerNumChannel{ 2 };
 //==============================================================================
 MainComponent::MainComponent():BandPassFilter(juce::dsp::IIR::Coefficients<float>::makeBandPass(44100, 20000, 0.1f)), gain{3.0}
 {
@@ -14,54 +15,54 @@ MainComponent::MainComponent():BandPassFilter(juce::dsp::IIR::Coefficients<float
 
     //get image from binary dataand set image component
     
-    auto tohpLogo{ juce::ImageCache::getFromMemory(BinaryData::tohp_logo_pngCopy1_png,
+    auto Logo{ juce::ImageCache::getFromMemory(BinaryData::tohp_logo_pngCopy1_png,
         BinaryData::tohp_logo_pngCopy1_pngSize) };
-    if (!tohpLogo.isNull())
-        mImageComponent.setImage(tohpLogo, juce::RectanglePlacement::stretchToFit);
+    if (!Logo.isNull())
+        mImageComponent.setImage(Logo, juce::RectanglePlacement::centred);
     else
-        jassert(!tohpLogo.isNull());
+        jassert(!Logo.isNull());
 
-    auto tohpBass{ juce::ImageCache::getFromMemory(BinaryData::bass_w_png,
+    auto Bass{ juce::ImageCache::getFromMemory(BinaryData::bass_w_png,
         BinaryData::bass_w_pngSize) };
-    if (!tohpLogo.isNull())
-        bassImageComponent.setImage(tohpBass, juce::RectanglePlacement::stretchToFit);
+    if (!Bass.isNull())
+        bassImageComponent.setImage(Bass, juce::RectanglePlacement::centred);
     else
-        jassert(!tohpBass.isNull());
+        jassert(!Bass.isNull());
 
-    auto tohpSoft{ juce::ImageCache::getFromMemory(BinaryData::soft_w_png,
+    auto Soft{ juce::ImageCache::getFromMemory(BinaryData::soft_w_png,
         BinaryData::soft_w_pngSize) };
-    if (!tohpSoft.isNull())
-        softImageComponent.setImage(tohpSoft, juce::RectanglePlacement::stretchToFit);
+    if (!Soft.isNull())
+        softImageComponent.setImage(Soft, juce::RectanglePlacement::centred);
     else
-        jassert(!tohpSoft.isNull());
+        jassert(!Soft.isNull());
 
-    auto tohpLoud{ juce::ImageCache::getFromMemory(BinaryData::loud_w_png,
+    auto Loud{ juce::ImageCache::getFromMemory(BinaryData::loud_w_png,
         BinaryData::loud_w_pngSize) };
-    if (!tohpLoud.isNull())
-        loudImageComponent.setImage(tohpLoud, juce::RectanglePlacement::stretchToFit);
+    if (!Loud.isNull())
+        loudImageComponent.setImage(Loud, juce::RectanglePlacement::centred);
     else
-        jassert(!tohpLoud.isNull());
+        jassert(!Loud.isNull());
 
-    auto tohpTreble{ juce::ImageCache::getFromMemory(BinaryData::treble_w_png,
+    auto Treble{ juce::ImageCache::getFromMemory(BinaryData::treble_w_png,
        BinaryData::treble_w_pngSize) };
-    if (!tohpTreble.isNull())
-        trebleImageComponent.setImage(tohpTreble, juce::RectanglePlacement::stretchToFit);
+    if (!Treble.isNull())
+        trebleImageComponent.setImage(Treble, juce::RectanglePlacement::centred);
     else
-        jassert(!tohpTreble.isNull());
+        jassert(!Treble.isNull());
 
-    auto tohpDefault{ juce::ImageCache::getFromMemory(BinaryData::play_png,
+    auto Default{ juce::ImageCache::getFromMemory(BinaryData::play_png,
         BinaryData::play_pngSize) };
-    if (!tohpDefault.isNull())
-        defaultImageComponent.setImage(tohpDefault, juce::RectanglePlacement::stretchToFit);
+    if (!Default.isNull())
+        defaultImageComponent.setImage(Default, juce::RectanglePlacement::centred);
     else
-        jassert(!tohpDefault.isNull());
+        jassert(!Default.isNull());
 
-    auto tohpResonanceDefault{ juce::ImageCache::getFromMemory(BinaryData::play_png,
+    auto ResonanceDefault{ juce::ImageCache::getFromMemory(BinaryData::play_png,
        BinaryData::play_pngSize) };
-    if (!tohpResonanceDefault.isNull())
-        defaultResonanceImageComponent.setImage(tohpResonanceDefault, juce::RectanglePlacement::stretchToFit);
+    if (!ResonanceDefault.isNull())
+        defaultResonanceImageComponent.setImage(ResonanceDefault, juce::RectanglePlacement::centred);
     else
-        jassert(!tohpResonanceDefault.isNull());
+        jassert(!ResonanceDefault.isNull());
 
 
     //add image components and make them visible
@@ -91,18 +92,24 @@ MainComponent::MainComponent():BandPassFilter(juce::dsp::IIR::Coefficients<float
     addAndMakeVisible(defaultLabel);
     defaultLabel.setFont(font);
 
-    addAndMakeVisible(button1);
+   /* addAndMakeVisible(button1);
     button1.setClickingTogglesState(true);
 
     addAndMakeVisible(button2);
     button2.setClickingTogglesState(true);
 
     addAndMakeVisible(button3);
-    button3.setClickingTogglesState(true);
+    button3.setClickingTogglesState(true);*/
+
+    addAndMakeVisible(_Gain);
+    _Gain.setRange(-24, 0, 1);
+    _Gain.setSliderStyle(juce::Slider::SliderStyle::Rotary);
+    _Gain.setTextBoxStyle(juce::Slider::TextBoxRight, false, 40, 20);
+    _Gain.setNumDecimalPlacesToDisplay(0);
 
     addAndMakeVisible(middlefrequency);
     middlefrequency.setRange(250.0, 5000.0);
-    middlefrequency.setSliderStyle(juce::Slider::SliderStyle::LinearVertical);
+    middlefrequency.setSliderStyle(juce::Slider::SliderStyle::Rotary);
     middlefrequency.setTextBoxStyle(juce::Slider::TextBoxRight, false, 40, 20);
     middlefrequency.setNumDecimalPlacesToDisplay(0);
 
@@ -112,7 +119,7 @@ MainComponent::MainComponent():BandPassFilter(juce::dsp::IIR::Coefficients<float
     addAndMakeVisible(resonance);
     resonance.setRange(2.0, 5.0);
     resonance.setTextBoxStyle(juce::Slider::TextBoxRight, false, 40, 20);
-    resonance.setSliderStyle(juce::Slider::SliderStyle::LinearVertical);
+    resonance.setSliderStyle(juce::Slider::SliderStyle::Rotary);
     resonance.setNumDecimalPlacesToDisplay(0);
 
     addAndMakeVisible(resonanceLabel);
@@ -121,16 +128,16 @@ MainComponent::MainComponent():BandPassFilter(juce::dsp::IIR::Coefficients<float
 
     addAndMakeVisible(visualizer);
 
-    //create radio group for button group effect
+    ////create radio group for button group effect
 
-    button1.setRadioGroupId(volumeButtons);
-    button2.setRadioGroupId(volumeButtons);
-    button3.setRadioGroupId(volumeButtons);
+    //button1.setRadioGroupId(volumeButtons);
+    //button2.setRadioGroupId(volumeButtons);
+    //button3.setRadioGroupId(volumeButtons);
 
-    //set on click event callback function
-    button1.onClick = [this] {setGain(button1.getButtonText()); };
-    button2.onClick = [this] {setGain(button2.getButtonText()); };
-    button3.onClick = [this] {setGain(button3.getButtonText()); };
+    ////set on click event callback function
+    //button1.onClick = [this] {setGain(button1.getButtonText()); };
+    //button2.onClick = [this] {setGain(button2.getButtonText()); };
+    //button3.onClick = [this] {setGain(button3.getButtonText()); };
 
    
 
@@ -173,6 +180,7 @@ void MainComponent::prepareToPlay(int samplesPerBlockExpected, double sampleRate
     spec.sampleRate = sampleRate;
     spec.numChannels = 2;
     setLastSampleRate(sampleRate);
+   
 
     //reset instances of the bandpass filter and the amplifier(Gain)
     BandPassFilter.reset();
@@ -195,7 +203,8 @@ void MainComponent::getNextAudioBlock (const juce::AudioSourceChannelInfo& buffe
     // Right now we are not producing any data, in which case we need to clear the buffer
     // (to prevent the output of random noise)
 
-    
+    visualizerNumChannel = bufferToFill.buffer->getNumChannels();
+
     
     auto* device = deviceManager.getCurrentAudioDevice();
     auto activeInputChannels = device->getActiveInputChannels();
@@ -225,6 +234,12 @@ void MainComponent::getNextAudioBlock (const juce::AudioSourceChannelInfo& buffe
 
     for (auto channel = 0; channel < maxOutputChannels; ++channel)
     {
+        
+
+
+        //apply output amplification
+        //Gain.process(juce::dsp::ProcessContextReplacing<float>(block));
+
         if ((!activeOutputChannels[channel]) || maxInputChannels == 0)
         {
             bufferToFill.buffer->clear(channel, bufferToFill.startSample, bufferToFill.numSamples);
@@ -233,25 +248,29 @@ void MainComponent::getNextAudioBlock (const juce::AudioSourceChannelInfo& buffe
         {
             auto actualInputChannel = channel % maxInputChannels; // [1]
 
-            if (!activeInputChannels[channel]) // [2]
-            {
-                bufferToFill.buffer->clear(channel, bufferToFill.startSample, bufferToFill.numSamples);
-            }
-            else // [3]
-            {
-                auto* inBuffer = bufferToFill.buffer->getReadPointer(actualInputChannel,
-                    bufferToFill.startSample);
-                
-                auto* outBuffer = bufferToFill.buffer->getWritePointer(channel, bufferToFill.startSample);
-                
-                
-                for (auto sample = 0; sample < bufferToFill.numSamples; ++sample)
-                    outBuffer[sample] = inBuffer[sample];
+            auto* inBuffer = bufferToFill.buffer->getReadPointer(actualInputChannel,
+                bufferToFill.startSample);
 
-                //apply output amplification
-                Gain.process(juce::dsp::ProcessContextReplacing<float>(block));
-            }
+            auto* outBuffer = bufferToFill.buffer->getWritePointer(channel, bufferToFill.startSample);
+
+
+            for (auto sample = 0; sample < bufferToFill.numSamples; ++sample)
+                outBuffer[sample] = inBuffer[sample];
+
+            //apply output amplification
+           Gain.process(juce::dsp::ProcessContextReplacing<float>(block));
         }
+        //    if (!activeInputChannels[channel]) // [2]
+        //    {
+        //        bufferToFill.buffer->clear(channel, bufferToFill.startSample, bufferToFill.numSamples);
+        //    }
+        //    else // [3]
+        //    {
+        //  
+        //        //apply output amplification
+        //        Gain.process(juce::dsp::ProcessContextReplacing<float>(block));
+        //    }
+        //}
     }
 
 
@@ -283,27 +302,19 @@ void MainComponent::resized()
     // This is called when the MainContentComponent is resized.
     // If you add any child components, this is where you should
     // update their positions.
-
+    float HalfParentWidth = getParentWidth()/2;
     //set bounds of the GUI components
     mImageComponent.setBounds(40, 10,70, 70 );
-    trebleImageComponent.setBounds(75, 430, 20, 20);
-    loudImageComponent.setBounds(275, 430, 20, 20);
-    bassImageComponent.setBounds(75, 660, 20, 20);
-    softImageComponent.setBounds(275, 660, 20, 20);
-    defaultImageComponent.setBounds(60, 500, 10, 20);
-    defaultResonanceImageComponent.setBounds(260, 550, 10, 20);
+    trebleImageComponent.setBounds(HalfParentWidth - 145, 540, 20, 20);
+    bassImageComponent.setBounds(HalfParentWidth - 90, 540, 20, 20);
+    loudImageComponent.setBounds(HalfParentWidth + 135, 540, 20, 20);
+    softImageComponent.setBounds(HalfParentWidth + 80, 540, 20, 20);
     visualizer.setCentreRelative(0.5f, 0.5f);
-    visualizer.setBounds(60, 300, 250, 80);
-    middlefrequency.setBounds(55, 450, 100, 200);
-    resonance.setBounds(255, 450, 100, 200);
-    volumeM.setBounds(140, -30, 300, 300);
-    volumeLabel1.setBounds(40, 151, 100, 100);
-    volumeLabel2.setBounds(180, 151, 100, 100);
-    volumeLabel3.setBounds(315, 151, 100, 100);
-    defaultLabel.setBounds(10, 500, 80, 20);
-    button1.setBounds(10,150, 120, 30);
-    button2.setBounds(140, 150, 120, 30);
-    button3.setBounds(270, 150, 120, 30);
+    visualizer.setBounds(HalfParentWidth - 125, 160, 250, 80);
+    middlefrequency.setBounds(HalfParentWidth - 165, 390, 150, 200);
+    resonance.setBounds(HalfParentWidth + 60, 390, 150, 200);
+    volumeM.setBounds(HalfParentWidth - 55, 140, 300, 300);
+    _Gain.setBounds(HalfParentWidth - 57.5, 260, 150, 200);
 }
 
 void MainComponent::setLastSampleRate(double sampleRate)
@@ -316,17 +327,28 @@ double MainComponent::getlastSampleRate() const
     return sampleRate;
 }
 
+int MainComponent::getNumInputChannels()
+{
+    return numInputChannels;
+}
+
+void MainComponent::setNumInputChannels(const int numInputChannels)
+{
+    this->numInputChannels = numInputChannels;
+}
+
+
 
 void MainComponent::setGain(const juce::String& buttonName)
 {
-    if (buttonName == "+")
+   /* if (buttonName == "+")
         this->gain = 6.0;
     else if (buttonName == "++")
         this->gain = 12.0;
     else
-        this->gain = 16.0;
+        this->gain = 16.0;*/
 
-    Gain.setGainDecibels((float)gain);
+    Gain.setGainDecibels((float)_Gain.getValue());
 }
 
 void MainComponent::UpdateFilter()
@@ -342,8 +364,11 @@ void MainComponent::UpdateFilter()
 }
 
 
+
+
+
 /*set the parameters for the GUI waveform visualizer*/
-Visualizer::Visualizer():AudioVisualiserComponent{2}
+Visualizer::Visualizer() :AudioVisualiserComponent{ visualizerNumChannel }
 {
     setBufferSize(1028);
     setSamplesPerBlock(256);
