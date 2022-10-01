@@ -14,8 +14,10 @@ class Visualizer :public juce::AudioVisualiserComponent {
 public:
     Visualizer();
     ~Visualizer() = default;
+    
 private:
 };
+
 
 
 class MainComponent  : public juce::AudioAppComponent
@@ -51,6 +53,13 @@ public:
    
     void setGain( const juce::String& buttonName);
 
+    int getNumInputChannels();
+
+    void setNumInputChannels(const int numInputChannels);
+
+    //GUI visualizer
+    Visualizer visualizer;
+
 private:
     //==============================================================================
     // Your private member variables go here...
@@ -58,9 +67,9 @@ private:
     //labels
     juce::Label freqLabel;
     juce::Label resonanceLabel;
-    juce::Label volumeLabel1{ "Soft", "6db" };
-    juce::Label volumeLabel2{ "Medium", "12db" };
-    juce::Label volumeLabel3{ "Loud", "16db" };
+    juce::Label volumeLabel1{ "Soft", "6 db" };
+    juce::Label volumeLabel2{ "Medium", "12 db" };
+    juce::Label volumeLabel3{ "Loud", "16 db" };
     juce::Label defaultLabel{ "Default", "Default" };
     juce::Label volumeM{ "Volume", "Volume" };
 
@@ -68,6 +77,7 @@ private:
     juce::Slider middlefrequency;
     juce::Slider resonance;
     juce::Slider volume;
+    juce::Slider _Gain;
     
     //Label fonts
     juce::Font font{};
@@ -82,26 +92,27 @@ private:
     juce::ImageComponent defaultImageComponent;
     juce::ImageComponent defaultResonanceImageComponent;
 
-    //Buttons
-    juce::TextButton button1{ "+" };
-    juce::TextButton button2{"++"};
-    juce::TextButton button3{ "+++" };
+    ////Buttons
+    //juce::TextButton button1{ "+" };
+    //juce::TextButton button2{"++"};
+    //juce::TextButton button3{ "+++" };
 
     //sampleRate
     double sampleRate{ 44100 };
-   
+
+    int numInputChannels{ 0 };
+    
 
 protected:
     //update bandpass filter
     void UpdateFilter();
 
-    //RadioGroup for volume buttons
-    enum radioId {
-        volumeButtons = 100
-    };
+    ////RadioGroup for volume buttons
+    //enum radioId {
+    //    volumeButtons = 100
+    //};
 
-    //GUI visualizer
-    Visualizer visualizer;
+    
 
     //JUCE Look and Feel class override
     CustomLNF customLNF;
@@ -109,3 +120,9 @@ protected:
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MainComponent)
 };
  
+//int getChannelCount() {
+//    MainComponent Comp;
+//    return Comp.getNumInputChannels();
+//}
+
+

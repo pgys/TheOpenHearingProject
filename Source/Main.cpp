@@ -10,12 +10,12 @@
 #include "MainComponent.h"
 
 //==============================================================================
-class LikeToHear_PrototypeApplication  : public juce::JUCEApplication
+class TheOpenHearingProject  : public juce::JUCEApplication
 {
 public:
     
     //==============================================================================
-    LikeToHear_PrototypeApplication() {}
+    TheOpenHearingProject() {}
 
     const juce::String getApplicationName() override       { return ProjectInfo::projectName; }
     const juce::String getApplicationVersion() override    { return ProjectInfo::versionString; }
@@ -103,4 +103,4 @@ private:
 
 //==============================================================================
 // This macro generates the main() routine that launches the app.
-START_JUCE_APPLICATION (LikeToHear_PrototypeApplication)
+START_JUCE_APPLICATION (TheOpenHearingProject)
