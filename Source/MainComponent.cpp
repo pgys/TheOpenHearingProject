@@ -2,7 +2,7 @@
 #include <JuceHeader.h>
 
 /** Global variable for the visualizer constructor */
-int visualizerNumChannel{ 2 };
+std::atomic<int> visualizerNumChannel{ 2 };
 //==============================================================================
 MainComponent::MainComponent():BandPassFilter(juce::dsp::IIR::Coefficients<float>::makeBandPass(44100, 20000, 0.1f)), gain{3.0}
 {
@@ -15,49 +15,49 @@ MainComponent::MainComponent():BandPassFilter(juce::dsp::IIR::Coefficients<float
 
     //get image from binary dataand set image component
     
-    auto Logo{ juce::ImageCache::getFromMemory(BinaryData::tohp_logo_pngCopy1_png,
+    decltype(auto) Logo{ juce::ImageCache::getFromMemory(BinaryData::tohp_logo_pngCopy1_png,
         BinaryData::tohp_logo_pngCopy1_pngSize) };
     if (!Logo.isNull())
         mImageComponent.setImage(Logo, juce::RectanglePlacement::centred);
     else
         jassert(!Logo.isNull());
 
-    auto Bass{ juce::ImageCache::getFromMemory(BinaryData::bass_w_png,
+    decltype(auto) Bass{ juce::ImageCache::getFromMemory(BinaryData::bass_w_png,
         BinaryData::bass_w_pngSize) };
     if (!Bass.isNull())
         bassImageComponent.setImage(Bass, juce::RectanglePlacement::centred);
     else
         jassert(!Bass.isNull());
 
-    auto Soft{ juce::ImageCache::getFromMemory(BinaryData::soft_w_png,
+    decltype(auto) Soft{ juce::ImageCache::getFromMemory(BinaryData::soft_w_png,
         BinaryData::soft_w_pngSize) };
     if (!Soft.isNull())
         softImageComponent.setImage(Soft, juce::RectanglePlacement::centred);
     else
         jassert(!Soft.isNull());
 
-    auto Loud{ juce::ImageCache::getFromMemory(BinaryData::loud_w_png,
+    decltype(auto) Loud{ juce::ImageCache::getFromMemory(BinaryData::loud_w_png,
         BinaryData::loud_w_pngSize) };
     if (!Loud.isNull())
         loudImageComponent.setImage(Loud, juce::RectanglePlacement::centred);
     else
         jassert(!Loud.isNull());
 
-    auto Treble{ juce::ImageCache::getFromMemory(BinaryData::treble_w_png,
+    decltype(auto) Treble{ juce::ImageCache::getFromMemory(BinaryData::treble_w_png,
        BinaryData::treble_w_pngSize) };
     if (!Treble.isNull())
         trebleImageComponent.setImage(Treble, juce::RectanglePlacement::centred);
     else
         jassert(!Treble.isNull());
 
-    auto Default{ juce::ImageCache::getFromMemory(BinaryData::play_png,
+    decltype(auto) Default{ juce::ImageCache::getFromMemory(BinaryData::play_png,
         BinaryData::play_pngSize) };
     if (!Default.isNull())
         defaultImageComponent.setImage(Default, juce::RectanglePlacement::centred);
     else
         jassert(!Default.isNull());
 
-    auto ResonanceDefault{ juce::ImageCache::getFromMemory(BinaryData::play_png,
+    decltype(auto) ResonanceDefault{ juce::ImageCache::getFromMemory(BinaryData::play_png,
        BinaryData::play_pngSize) };
     if (!ResonanceDefault.isNull())
         defaultResonanceImageComponent.setImage(ResonanceDefault, juce::RectanglePlacement::centred);
@@ -80,6 +80,9 @@ MainComponent::MainComponent():BandPassFilter(juce::dsp::IIR::Coefficients<float
     addAndMakeVisible(volumeM);
     volumeM.setFont(Vfont);
 
+    addAndMakeVisible(Timbre);
+    Timbre.setFont(Vfont);
+
     addAndMakeVisible(volumeLabel1);
     volumeLabel1.setFont(font);
    
@@ -92,14 +95,6 @@ MainComponent::MainComponent():BandPassFilter(juce::dsp::IIR::Coefficients<float
     addAndMakeVisible(defaultLabel);
     defaultLabel.setFont(font);
 
-   /* addAndMakeVisible(button1);
-    button1.setClickingTogglesState(true);
-
-    addAndMakeVisible(button2);
-    button2.setClickingTogglesState(true);
-
-    addAndMakeVisible(button3);
-    button3.setClickingTogglesState(true);*/
 
     addAndMakeVisible(_Gain);
     _Gain.setRange(-24, 0, 1);
@@ -112,6 +107,7 @@ MainComponent::MainComponent():BandPassFilter(juce::dsp::IIR::Coefficients<float
     middlefrequency.setSliderStyle(juce::Slider::SliderStyle::Rotary);
     middlefrequency.setTextBoxStyle(juce::Slider::TextBoxRight, false, 40, 20);
     middlefrequency.setNumDecimalPlacesToDisplay(0);
+  
 
     addAndMakeVisible(freqLabel);
     freqLabel.setText("Frequency", juce::NotificationType::dontSendNotification);
@@ -127,19 +123,6 @@ MainComponent::MainComponent():BandPassFilter(juce::dsp::IIR::Coefficients<float
 
 
     addAndMakeVisible(visualizer);
-
-    ////create radio group for button group effect
-
-    //button1.setRadioGroupId(volumeButtons);
-    //button2.setRadioGroupId(volumeButtons);
-    //button3.setRadioGroupId(volumeButtons);
-
-    ////set on click event callback function
-    //button1.onClick = [this] {setGain(button1.getButtonText()); };
-    //button2.onClick = [this] {setGain(button2.getButtonText()); };
-    //button3.onClick = [this] {setGain(button3.getButtonText()); };
-
-   
 
     // Some platforms require permissions to open input channels so request that here
     if (juce::RuntimePermissions::isRequired (juce::RuntimePermissions::recordAudio)
@@ -260,17 +243,7 @@ void MainComponent::getNextAudioBlock (const juce::AudioSourceChannelInfo& buffe
             //apply output amplification
            Gain.process(juce::dsp::ProcessContextReplacing<float>(block));
         }
-        //    if (!activeInputChannels[channel]) // [2]
-        //    {
-        //        bufferToFill.buffer->clear(channel, bufferToFill.startSample, bufferToFill.numSamples);
-        //    }
-        //    else // [3]
-        //    {
-        //  
-        //        //apply output amplification
-        //        Gain.process(juce::dsp::ProcessContextReplacing<float>(block));
-        //    }
-        //}
+        
     }
 
 
@@ -293,7 +266,7 @@ void MainComponent::paint (juce::Graphics& g)
     g.setGradientFill(gradient);
     g.fillAll();
     g.setColour(juce::Colour(10));
-
+    
     // You can add your drawing code here!
 }
 
@@ -305,49 +278,33 @@ void MainComponent::resized()
     float HalfParentWidth = getParentWidth()/2;
     //set bounds of the GUI components
     mImageComponent.setBounds(40, 10,70, 70 );
-    trebleImageComponent.setBounds(HalfParentWidth - 145, 540, 20, 20);
-    bassImageComponent.setBounds(HalfParentWidth - 90, 540, 20, 20);
-    loudImageComponent.setBounds(HalfParentWidth + 135, 540, 20, 20);
-    softImageComponent.setBounds(HalfParentWidth + 80, 540, 20, 20);
+    trebleImageComponent.setBounds(HalfParentWidth - 145, 590, 20, 20);
+    bassImageComponent.setBounds(HalfParentWidth - 90, 590, 20, 20);
+    loudImageComponent.setBounds(HalfParentWidth + 115, 590, 20, 20);
+    softImageComponent.setBounds(HalfParentWidth + 60, 590, 20, 20);
     visualizer.setCentreRelative(0.5f, 0.5f);
-    visualizer.setBounds(HalfParentWidth - 125, 160, 250, 80);
-    middlefrequency.setBounds(HalfParentWidth - 165, 390, 150, 200);
-    resonance.setBounds(HalfParentWidth + 60, 390, 150, 200);
-    volumeM.setBounds(HalfParentWidth - 55, 140, 300, 300);
-    _Gain.setBounds(HalfParentWidth - 57.5, 260, 150, 200);
+    visualizer.setBounds(HalfParentWidth - 125, 150, 250, 80);
+    middlefrequency.setBounds(HalfParentWidth - 165, 440, 150, 200);
+    resonance.setBounds(HalfParentWidth + 40, 440, 150, 200);
+    volumeM.setBounds(HalfParentWidth - 75, 150, 300, 300);
+    Timbre.setBounds(HalfParentWidth - 70, 270, 400, 400);
+    _Gain.setBounds(HalfParentWidth - 62.5, 280, 150, 200);
 }
 
-void MainComponent::setLastSampleRate(double sampleRate)
+void MainComponent::setLastSampleRate(double _sampleRate)const
 {
-    this->sampleRate = sampleRate;
+    sampleRate = _sampleRate;
 }
 
-double MainComponent::getlastSampleRate() const
+const double MainComponent::getlastSampleRate()
 {
     return sampleRate;
-}
-
-int MainComponent::getNumInputChannels()
-{
-    return numInputChannels;
-}
-
-void MainComponent::setNumInputChannels(const int numInputChannels)
-{
-    this->numInputChannels = numInputChannels;
 }
 
 
 
 void MainComponent::setGain(const juce::String& buttonName)
 {
-   /* if (buttonName == "+")
-        this->gain = 6.0;
-    else if (buttonName == "++")
-        this->gain = 12.0;
-    else
-        this->gain = 16.0;*/
-
     Gain.setGainDecibels((float)_Gain.getValue());
 }
 

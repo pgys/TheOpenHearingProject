@@ -45,17 +45,13 @@ public:
     juce::dsp::Gain<float> Gain;
 
     //Member getter and setter functions
-    void setLastSampleRate(const double sampleRate);
-    double getlastSampleRate ()const;
+    void setLastSampleRate (double sampleRate)const;
+    const double getlastSampleRate ();
 
 
     double gain;
    
     void setGain( const juce::String& buttonName);
-
-    int getNumInputChannels();
-
-    void setNumInputChannels(const int numInputChannels);
 
     //GUI visualizer
     Visualizer visualizer;
@@ -72,6 +68,7 @@ private:
     juce::Label volumeLabel3{ "Loud", "16 db" };
     juce::Label defaultLabel{ "Default", "Default" };
     juce::Label volumeM{ "Volume", "Volume" };
+    juce::Label Timbre{ "Timbre", "Timbre" };
 
     //Sliders
     juce::Slider middlefrequency;
@@ -81,7 +78,7 @@ private:
     
     //Label fonts
     juce::Font font{};
-    juce::Font Vfont{ 30.0f };
+    juce::Font Vfont{ 40.0f };
 
     //Image Components
     juce::ImageComponent mImageComponent;
@@ -98,9 +95,11 @@ private:
     //juce::TextButton button3{ "+++" };
 
     //sampleRate
-    double sampleRate{ 44100 };
+    mutable double sampleRate{ 44100 };
 
     int numInputChannels{ 0 };
+
+    juce::Slider::TextEntryBoxPosition GainTextBoxPos;
     
 
 protected:
