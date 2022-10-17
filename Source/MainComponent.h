@@ -70,7 +70,7 @@ private:
     // 
     //labels
     juce::Label freqLabel;
-    juce::Label resonanceLabel;
+    juce::Label qualityFactorLabel;
     juce::Label gainUnitLabel{ "Soft", "dB" };
     juce::Label volumeLabel2{ "Medium", "12 db" };
     juce::Label volumeLabel3{ "Loud", "16 db" };
@@ -80,7 +80,7 @@ private:
 
     //Sliders
     juce::Slider middleFrequency;
-    juce::Slider resonance;
+    juce::Slider qualityFactor;
     juce::Slider volume;
     juce::Slider _Gain;
     
@@ -95,7 +95,7 @@ private:
     juce::ImageComponent trebleImageComponent;
     juce::ImageComponent bassImageComponent;
     juce::ImageComponent defaultImageComponent;
-    juce::ImageComponent defaultResonanceImageComponent;
+    juce::ImageComponent defaultqualityFactorImageComponent;
 
     ////Buttons
     //juce::TextButton button1{ "+" };

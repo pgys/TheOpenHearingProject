@@ -57,12 +57,12 @@ MainComponent::MainComponent():BandPassFilter(juce::dsp::IIR::Coefficients<float
     else
         jassert(!Default.isNull());
 
-    decltype(auto) ResonanceDefault{ juce::ImageCache::getFromMemory(BinaryData::play_png,
+    decltype(auto) qualityFactorDefault{ juce::ImageCache::getFromMemory(BinaryData::play_png,
        BinaryData::play_pngSize) };
-    if (!ResonanceDefault.isNull())
-        defaultResonanceImageComponent.setImage(ResonanceDefault, juce::RectanglePlacement::centred);
+    if (!qualityFactorDefault.isNull())
+        defaultqualityFactorImageComponent.setImage(qualityFactorDefault, juce::RectanglePlacement::centred);
     else
-        jassert(!ResonanceDefault.isNull());
+        jassert(!qualityFactorDefault.isNull());
 
 
     //add image components and make them visible
@@ -72,7 +72,7 @@ MainComponent::MainComponent():BandPassFilter(juce::dsp::IIR::Coefficients<float
     addAndMakeVisible(loudImageComponent);
     addAndMakeVisible(trebleImageComponent);
     addAndMakeVisible(defaultImageComponent);
-    addAndMakeVisible(defaultResonanceImageComponent);
+    addAndMakeVisible(defaultqualityFactorImageComponent);
 
     //add other components, make them visible and set their initial states 
     //and features if necessary
@@ -113,14 +113,14 @@ MainComponent::MainComponent():BandPassFilter(juce::dsp::IIR::Coefficients<float
     addAndMakeVisible(freqLabel);
     freqLabel.setText("Hz", juce::NotificationType::dontSendNotification);
 
-    addAndMakeVisible(resonance);
-    resonance.setRange(0.1, 10.0);
-    resonance.setTextBoxStyle(juce::Slider::TextBoxRight, false, 40, 20);
-    resonance.setSliderStyle(juce::Slider::SliderStyle::Rotary);
-    resonance.setNumDecimalPlacesToDisplay(0);
+    addAndMakeVisible(qualityFactor);
+    qualityFactor.setRange(0.1, 10.0);
+    qualityFactor.setTextBoxStyle(juce::Slider::TextBoxRight, false, 40, 20);
+    qualityFactor.setSliderStyle(juce::Slider::SliderStyle::Rotary);
+    qualityFactor.setNumDecimalPlacesToDisplay(0);
 
-    addAndMakeVisible(resonanceLabel);
-    resonanceLabel.setText("Resonance", juce::NotificationType::dontSendNotification);
+    addAndMakeVisible(qualityFactorLabel);
+    qualityFactorLabel.setText("Quality Factor", juce::NotificationType::dontSendNotification);
 
 
     addAndMakeVisible(visualizer);
@@ -207,7 +207,7 @@ void MainComponent::getNextAudioBlock (const juce::AudioSourceChannelInfo& buffe
     // set the gain level
     Gain.setGainDecibels((float)gain);
 
-    //get the mid frequency and resonance values and set the bandpass filter parameters
+    //get the mid frequency and qualityFactor values and set the bandpass filter parameters
     UpdateFilter();
 
     //apply the bandpass filter and input amplification to the audio data.
@@ -280,7 +280,7 @@ void MainComponent::resized()
     visualizer.setCentreRelative(0.5f, 0.5f);
     visualizer.setBounds(HalfParentWidth - 125, 150, 250, 80);
     middleFrequency.setBounds(HalfParentWidth - 165, 440, 150, 200);
-    resonance.setBounds(HalfParentWidth + 40, 440, 150, 200);
+    qualityFactor.setBounds(HalfParentWidth + 40, 440, 150, 200);
     gainDescLabel.setBounds(HalfParentWidth - 100, 150, 300, 300);
     gainUnitLabel.setBounds(HalfParentWidth + 87.5, 360, 40, 40);
     timbre.setBounds(HalfParentWidth - 70, 270, 400, 400);
@@ -309,7 +309,7 @@ void MainComponent::UpdateFilter()
 {
     //get the values of the sliders from the gui
     float MidFreq = std::clamp<float>((float)middleFrequency.getValue(), bandWidth/2 + minFrequency, maxFrequency - bandWidth/2);
-    float Q = (float)resonance.getValue();
+    float Q = (float)qualityFactor.getValue();
     
     //updates the bandpassfilter
     *LowShelfFilter.state = *juce::dsp::IIR::Coefficients<float>::makeLowShelf(getlastSampleRate(), MidFreq + bandWidth/2, Q, juce::Decibels::decibelsToGain(gain));
