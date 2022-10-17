@@ -4,7 +4,7 @@
 /** Global variable for the visualizer constructor */
 std::atomic<int> visualizerNumChannel{ 2 };
 //==============================================================================
-MainComponent::MainComponent():BandPassFilter(juce::dsp::IIR::Coefficients<float>::makeBandPass(44100, 20000, 0.1f)), gain{3.0}
+MainComponent::MainComponent():BandPassFilter(juce::dsp::IIR::Coefficients<float>::makeBandPass(44100, 20000, 0.1f)), gain{-24.0}
 {
     // Make sure you set the size of the component after
     // you add any child components.
@@ -77,14 +77,14 @@ MainComponent::MainComponent():BandPassFilter(juce::dsp::IIR::Coefficients<float
     //add other components, make them visible and set their initial states 
     //and features if necessary
 
-    addAndMakeVisible(volumeM);
-    volumeM.setFont(Vfont);
+    addAndMakeVisible(gainDescLabel);
+    gainDescLabel.setFont(Vfont);
 
-    addAndMakeVisible(Timbre);
-    Timbre.setFont(Vfont);
+    addAndMakeVisible(timbre);
+    timbre.setFont(Vfont);
 
-    addAndMakeVisible(volumeLabel1);
-    volumeLabel1.setFont(font);
+    addAndMakeVisible(gainUnitLabel);
+    gainUnitLabel.setFont(font);
    
     addAndMakeVisible(volumeLabel2);
     volumeLabel2.setFont(font);
@@ -97,23 +97,24 @@ MainComponent::MainComponent():BandPassFilter(juce::dsp::IIR::Coefficients<float
 
 
     addAndMakeVisible(_Gain);
-    _Gain.setRange(-24, 0, 1);
+    _Gain.setRange(0.0, 6.0, 1.0);
+    _Gain.setValue(-24, juce::NotificationType::dontSendNotification);
     _Gain.setSliderStyle(juce::Slider::SliderStyle::Rotary);
     _Gain.setTextBoxStyle(juce::Slider::TextBoxRight, false, 40, 20);
     _Gain.setNumDecimalPlacesToDisplay(0);
-
-    addAndMakeVisible(middlefrequency);
-    middlefrequency.setRange(250.0, 5000.0);
-    middlefrequency.setSliderStyle(juce::Slider::SliderStyle::Rotary);
-    middlefrequency.setTextBoxStyle(juce::Slider::TextBoxRight, false, 40, 20);
-    middlefrequency.setNumDecimalPlacesToDisplay(0);
+    _Gain.onValueChange = [this]() {gain = _Gain.getValue(); };
+    addAndMakeVisible(middleFrequency);
+    middleFrequency.setRange(250.0, 5000.0);
+    middleFrequency.setSliderStyle(juce::Slider::SliderStyle::Rotary);
+    middleFrequency.setTextBoxStyle(juce::Slider::TextBoxRight, false, 40, 20);
+    middleFrequency.setNumDecimalPlacesToDisplay(0);
   
 
     addAndMakeVisible(freqLabel);
-    freqLabel.setText("Frequency", juce::NotificationType::dontSendNotification);
+    freqLabel.setText("Hz", juce::NotificationType::dontSendNotification);
 
     addAndMakeVisible(resonance);
-    resonance.setRange(2.0, 5.0);
+    resonance.setRange(0.1, 10.0);
     resonance.setTextBoxStyle(juce::Slider::TextBoxRight, false, 40, 20);
     resonance.setSliderStyle(juce::Slider::SliderStyle::Rotary);
     resonance.setNumDecimalPlacesToDisplay(0);
@@ -123,6 +124,7 @@ MainComponent::MainComponent():BandPassFilter(juce::dsp::IIR::Coefficients<float
 
 
     addAndMakeVisible(visualizer);
+
 
     // Some platforms require permissions to open input channels so request that here
     if (juce::RuntimePermissions::isRequired (juce::RuntimePermissions::recordAudio)
@@ -165,12 +167,14 @@ void MainComponent::prepareToPlay(int samplesPerBlockExpected, double sampleRate
     setLastSampleRate(sampleRate);
    
 
-    //reset instances of the bandpass filter and the amplifier(Gain)
-    BandPassFilter.reset();
+    //reset Filters and the amplifier(Gain)
+    LowShelfFilter.reset();
+    HighShelfFilter.reset();
     Gain.reset();
 
     //prepare instances of the bandpass filter and the amplifier(Gain)
-    BandPassFilter.prepare(spec);
+    LowShelfFilter.prepare(spec);
+    HighShelfFilter.prepare(spec);
     Gain.prepare(spec);
 
    //clear the visualizer before next display
@@ -185,8 +189,6 @@ void MainComponent::getNextAudioBlock (const juce::AudioSourceChannelInfo& buffe
 
     // Right now we are not producing any data, in which case we need to clear the buffer
     // (to prevent the output of random noise)
-
-    visualizerNumChannel = bufferToFill.buffer->getNumChannels();
 
     
     auto* device = deviceManager.getCurrentAudioDevice();
@@ -209,19 +211,14 @@ void MainComponent::getNextAudioBlock (const juce::AudioSourceChannelInfo& buffe
     UpdateFilter();
 
     //apply the bandpass filter and input amplification to the audio data.
-    BandPassFilter.process(juce::dsp::ProcessContextReplacing<float>(block));
-    Gain.process(juce::dsp::ProcessContextReplacing<float>(block));
-    
+    LowShelfFilter.process(juce::dsp::ProcessContextReplacing<float>(block));
+    HighShelfFilter.process(juce::dsp::ProcessContextReplacing<float>(block));
+   
     //push the processed data to the visualizer
     visualizer.pushBuffer(bufferToFill);
 
     for (auto channel = 0; channel < maxOutputChannels; ++channel)
     {
-        
-
-
-        //apply output amplification
-        //Gain.process(juce::dsp::ProcessContextReplacing<float>(block));
 
         if ((!activeOutputChannels[channel]) || maxInputChannels == 0)
         {
@@ -238,10 +235,8 @@ void MainComponent::getNextAudioBlock (const juce::AudioSourceChannelInfo& buffe
 
 
             for (auto sample = 0; sample < bufferToFill.numSamples; ++sample)
-                outBuffer[sample] = inBuffer[sample];
+                outBuffer[sample] = inBuffer[sample] ;
 
-            //apply output amplification
-           Gain.process(juce::dsp::ProcessContextReplacing<float>(block));
         }
         
     }
@@ -284,11 +279,13 @@ void MainComponent::resized()
     softImageComponent.setBounds(HalfParentWidth + 60, 590, 20, 20);
     visualizer.setCentreRelative(0.5f, 0.5f);
     visualizer.setBounds(HalfParentWidth - 125, 150, 250, 80);
-    middlefrequency.setBounds(HalfParentWidth - 165, 440, 150, 200);
+    middleFrequency.setBounds(HalfParentWidth - 165, 440, 150, 200);
     resonance.setBounds(HalfParentWidth + 40, 440, 150, 200);
-    volumeM.setBounds(HalfParentWidth - 75, 150, 300, 300);
-    Timbre.setBounds(HalfParentWidth - 70, 270, 400, 400);
+    gainDescLabel.setBounds(HalfParentWidth - 100, 150, 300, 300);
+    gainUnitLabel.setBounds(HalfParentWidth + 87.5, 360, 40, 40);
+    timbre.setBounds(HalfParentWidth - 70, 270, 400, 400);
     _Gain.setBounds(HalfParentWidth - 62.5, 280, 150, 200);
+    freqLabel.setBounds(HalfParentWidth - 15, 520, 40, 40);
 }
 
 void MainComponent::setLastSampleRate(double _sampleRate)const
@@ -311,12 +308,12 @@ void MainComponent::setGain(const juce::String& buttonName)
 void MainComponent::UpdateFilter()
 {
     //get the values of the sliders from the gui
-    auto MidFreq = (float)middlefrequency.getValue();
-    auto res = (float)resonance.getValue();
+    float MidFreq = std::clamp<float>((float)middleFrequency.getValue(), bandWidth/2 + minFrequency, maxFrequency - bandWidth/2);
+    float Q = (float)resonance.getValue();
     
     //updates the bandpassfilter
-    if(MidFreq > 0 && res > 0)
-        *BandPassFilter.state = *juce::dsp::IIR::Coefficients<float>::makeBandPass(getlastSampleRate(), MidFreq, res);
+    *LowShelfFilter.state = *juce::dsp::IIR::Coefficients<float>::makeLowShelf(getlastSampleRate(), MidFreq + bandWidth/2, Q, juce::Decibels::decibelsToGain(gain));
+    *HighShelfFilter.state = *juce::dsp::IIR::Coefficients<float>::makeHighShelf(getlastSampleRate(), MidFreq - bandWidth / 2, Q, juce::Decibels::decibelsToGain(gain));
    
 }
 

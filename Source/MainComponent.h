@@ -41,6 +41,14 @@ public:
         juce::dsp::IIR::Coefficients<float>>
         BandPassFilter;
 
+    juce::dsp::ProcessorDuplicator<juce::dsp::IIR::Filter<float>,
+        juce::dsp::IIR::Coefficients<float>>
+        HighShelfFilter;
+
+    juce::dsp::ProcessorDuplicator<juce::dsp::IIR::Filter<float>,
+        juce::dsp::IIR::Coefficients<float>>
+        LowShelfFilter;
+
     //Gain Instance
     juce::dsp::Gain<float> Gain;
 
@@ -49,7 +57,7 @@ public:
     const double getlastSampleRate ();
 
 
-    double gain;
+    double gain{0.0};
    
     void setGain( const juce::String& buttonName);
 
@@ -63,15 +71,15 @@ private:
     //labels
     juce::Label freqLabel;
     juce::Label resonanceLabel;
-    juce::Label volumeLabel1{ "Soft", "6 db" };
+    juce::Label gainUnitLabel{ "Soft", "dB" };
     juce::Label volumeLabel2{ "Medium", "12 db" };
     juce::Label volumeLabel3{ "Loud", "16 db" };
     juce::Label defaultLabel{ "Default", "Default" };
-    juce::Label volumeM{ "Volume", "Volume" };
-    juce::Label Timbre{ "Timbre", "Timbre" };
+    juce::Label gainDescLabel{ "Volume", "Mic Volume" };
+    juce::Label timbre{ "timbre", "Timbre" };
 
     //Sliders
-    juce::Slider middlefrequency;
+    juce::Slider middleFrequency;
     juce::Slider resonance;
     juce::Slider volume;
     juce::Slider _Gain;
@@ -101,7 +109,9 @@ private:
 
     juce::Slider::TextEntryBoxPosition GainTextBoxPos;
     
-
+    /** Bandwidth size*/
+    float bandWidth{ 1000.f };
+    
 protected:
     //update bandpass filter
     void UpdateFilter();
@@ -111,7 +121,8 @@ protected:
     //    volumeButtons = 100
     //};
 
-    
+    const float minFrequency{ 250.f };
+    const float maxFrequency{ 5'000.f };
 
     //JUCE Look and Feel class override
     CustomLNF customLNF;
