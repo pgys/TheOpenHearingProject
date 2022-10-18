@@ -103,11 +103,11 @@ MainComponent::MainComponent():BandPassFilter(juce::dsp::IIR::Coefficients<float
     _Gain.setTextBoxStyle(juce::Slider::TextBoxRight, false, 40, 20);
     _Gain.setNumDecimalPlacesToDisplay(0);
     _Gain.onValueChange = [this]() {gain = _Gain.getValue(); };
-    addAndMakeVisible(middleFrequency);
-    middleFrequency.setRange(250.0, 5000.0);
-    middleFrequency.setSliderStyle(juce::Slider::SliderStyle::Rotary);
-    middleFrequency.setTextBoxStyle(juce::Slider::TextBoxRight, false, 40, 20);
-    middleFrequency.setNumDecimalPlacesToDisplay(0);
+    addAndMakeVisible(cutoffFrequency);
+    cutoffFrequency.setRange(250.0, 5000.0);
+    cutoffFrequency.setSliderStyle(juce::Slider::SliderStyle::Rotary);
+    cutoffFrequency.setTextBoxStyle(juce::Slider::TextBoxRight, false, 40, 20);
+    cutoffFrequency.setNumDecimalPlacesToDisplay(0);
   
 
     addAndMakeVisible(freqLabel);
@@ -273,19 +273,18 @@ void MainComponent::resized()
     float HalfParentWidth = getParentWidth()/2;
     //set bounds of the GUI components
     mImageComponent.setBounds(40, 10,70, 70 );
-    trebleImageComponent.setBounds(HalfParentWidth - 145, 590, 20, 20);
-    bassImageComponent.setBounds(HalfParentWidth - 90, 590, 20, 20);
-    loudImageComponent.setBounds(HalfParentWidth + 115, 590, 20, 20);
-    softImageComponent.setBounds(HalfParentWidth + 60, 590, 20, 20);
+    trebleImageComponent.setBounds(HalfParentWidth - 90, 590, 20, 20);
+    bassImageComponent.setBounds(HalfParentWidth - 145, 590, 20, 20);
+    loudImageComponent.setBounds(HalfParentWidth + 105, 590, 20, 20);
+    softImageComponent.setBounds(HalfParentWidth + 50, 590, 20, 20);
     visualizer.setCentreRelative(0.5f, 0.5f);
     visualizer.setBounds(HalfParentWidth - 125, 150, 250, 80);
-    middleFrequency.setBounds(HalfParentWidth - 165, 440, 150, 200);
-    qualityFactor.setBounds(HalfParentWidth + 40, 440, 150, 200);
-    gainDescLabel.setBounds(HalfParentWidth - 100, 150, 300, 300);
-    gainUnitLabel.setBounds(HalfParentWidth + 87.5, 360, 40, 40);
-    timbre.setBounds(HalfParentWidth - 70, 270, 400, 400);
-    _Gain.setBounds(HalfParentWidth - 62.5, 280, 150, 200);
-    freqLabel.setBounds(HalfParentWidth - 15, 520, 40, 40);
+    cutoffFrequency.setBounds(HalfParentWidth - 165, 440, 150, 200);
+    gainDescLabel.setBounds(HalfParentWidth - 15, 270, 200, 400);
+    gainUnitLabel.setBounds(HalfParentWidth + 180, 520, 30, 40);
+    timbre.setBounds(HalfParentWidth - 160, 270, 200, 400);
+    _Gain.setBounds(HalfParentWidth + 30, 440, 150, 200);
+    freqLabel.setBounds(HalfParentWidth - 15, 520, 30, 40);
 }
 
 void MainComponent::setLastSampleRate(double _sampleRate)const
@@ -308,12 +307,11 @@ void MainComponent::setGain(const juce::String& buttonName)
 void MainComponent::UpdateFilter()
 {
     //get the values of the sliders from the gui
-    float MidFreq = std::clamp<float>((float)middleFrequency.getValue(), bandWidth/2 + minFrequency, maxFrequency - bandWidth/2);
-    float Q = (float)qualityFactor.getValue();
+    float cutoffFreq = std::clamp<float>((float)cutoffFrequency.getValue(), minFrequency, maxFrequency/2); 
     
-    //updates the bandpassfilter
-    *LowShelfFilter.state = *juce::dsp::IIR::Coefficients<float>::makeLowShelf(getlastSampleRate(), MidFreq + bandWidth/2, Q, juce::Decibels::decibelsToGain(gain));
-    *HighShelfFilter.state = *juce::dsp::IIR::Coefficients<float>::makeHighShelf(getlastSampleRate(), MidFreq - bandWidth / 2, Q, juce::Decibels::decibelsToGain(gain));
+    //updates the lowshelf and high shelf filters
+    *LowShelfFilter.state = *juce::dsp::IIR::Coefficients<float>::makeLowShelf(getlastSampleRate(), cutoffFreq * 2.f, qFactorVal, juce::Decibels::decibelsToGain(gain));
+    *HighShelfFilter.state = *juce::dsp::IIR::Coefficients<float>::makeHighShelf(getlastSampleRate(), cutoffFreq, qFactorVal, juce::Decibels::decibelsToGain(gain));
    
 }
 

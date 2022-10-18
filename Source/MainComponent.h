@@ -76,10 +76,10 @@ private:
     juce::Label volumeLabel3{ "Loud", "16 db" };
     juce::Label defaultLabel{ "Default", "Default" };
     juce::Label gainDescLabel{ "Volume", "Mic Volume" };
-    juce::Label timbre{ "timbre", "Timbre" };
+    juce::Label timbre{ "cutoffFreq", "Cutoff" };
 
     //Sliders
-    juce::Slider middleFrequency;
+    juce::Slider cutoffFrequency;
     juce::Slider qualityFactor;
     juce::Slider volume;
     juce::Slider _Gain;
@@ -96,11 +96,6 @@ private:
     juce::ImageComponent bassImageComponent;
     juce::ImageComponent defaultImageComponent;
     juce::ImageComponent defaultqualityFactorImageComponent;
-
-    ////Buttons
-    //juce::TextButton button1{ "+" };
-    //juce::TextButton button2{"++"};
-    //juce::TextButton button3{ "+++" };
 
     //sampleRate
     mutable double sampleRate{ 44100 };
@@ -123,6 +118,7 @@ protected:
 
     const float minFrequency{ 250.f };
     const float maxFrequency{ 5'000.f };
+    const float qFactorVal{ 1.35f };
 
     //JUCE Look and Feel class override
     CustomLNF customLNF;
