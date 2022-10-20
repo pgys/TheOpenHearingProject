@@ -36,11 +36,7 @@ public:
     void paint (juce::Graphics& g) override;
     void resized() override;
 
-    //Bandpass Filter instance
-    juce::dsp::ProcessorDuplicator<juce::dsp::IIR::Filter<float>,
-        juce::dsp::IIR::Coefficients<float>>
-        BandPassFilter;
-
+    //Filter instance
     juce::dsp::ProcessorDuplicator<juce::dsp::IIR::Filter<float>,
         juce::dsp::IIR::Coefficients<float>>
         HighShelfFilter;
@@ -50,16 +46,15 @@ public:
         LowShelfFilter;
 
     //Gain Instance
-    juce::dsp::Gain<float> Gain;
+    juce::dsp::Gain<float> GainInstance;
 
     //Member getter and setter functions
     void setLastSampleRate (double sampleRate)const;
     const double getlastSampleRate ();
 
 
-    double gain{0.0};
-   
-    void setGain( const juce::String& buttonName);
+    double inputGainVar{0.0};
+    double shelfGain{ 0.0 };
 
     //GUI visualizer
     Visualizer visualizer;
@@ -71,18 +66,18 @@ private:
     //labels
     juce::Label freqLabel;
     juce::Label qualityFactorLabel;
-    juce::Label gainUnitLabel{ "Soft", "dB" };
-    juce::Label volumeLabel2{ "Medium", "12 db" };
-    juce::Label volumeLabel3{ "Loud", "16 db" };
-    juce::Label defaultLabel{ "Default", "Default" };
-    juce::Label gainDescLabel{ "Volume", "Mic Volume" };
-    juce::Label timbre{ "cutoffFreq", "Cutoff" };
+    juce::Label shelfGainUnitLabel{ "Soft", "dB" };
+    juce::Label shelfGainDescLabel{ "shelfGain", "Shelf Gain" };
+    juce::Label cutoffFreqLabel{ "cutoffFreq", "Cutoff" };
+    juce::Label inputGainLabel{ "inputGain", "Mic Volume" };
+    juce::Label inputGainUnitLabel{ "inputGainUnit", "dB" };
 
     //Sliders
     juce::Slider cutoffFrequency;
     juce::Slider qualityFactor;
     juce::Slider volume;
-    juce::Slider _Gain;
+    juce::Slider ShelfFiltersGain;
+    juce::Slider InputGain;
     
     //Label fonts
     juce::Font font{};
@@ -104,9 +99,6 @@ private:
 
     juce::Slider::TextEntryBoxPosition GainTextBoxPos;
     
-    /** Bandwidth size*/
-    float bandWidth{ 1000.f };
-    
 protected:
     //update bandpass filter
     void UpdateFilter();
@@ -117,8 +109,12 @@ protected:
     //};
 
     const float minFrequency{ 250.f };
-    const float maxFrequency{ 5'000.f };
+    const float maxFrequency{ 6'000.f };
     const float qFactorVal{ 1.35f };
+
+    //Shelf Gain values
+    float lowShelfGain{ 0.0f };
+    float highShelfGain{ 0.0f };
 
     //JUCE Look and Feel class override
     CustomLNF customLNF;
@@ -126,9 +122,6 @@ protected:
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MainComponent)
 };
  
-//int getChannelCount() {
-//    MainComponent Comp;
-//    return Comp.getNumInputChannels();
-//}
+
 
 
