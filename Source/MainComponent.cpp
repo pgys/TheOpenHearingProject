@@ -18,7 +18,7 @@ MainComponent::MainComponent() :inputGainVar{ -24.0 }, shelfGain{ 0.0 }
     decltype(auto) Logo{ juce::ImageCache::getFromMemory(BinaryData::tohp_logo_pngCopy1_png,
         BinaryData::tohp_logo_pngCopy1_pngSize) };
     if (!Logo.isNull())
-        mImageComponent.setImage(Logo, juce::RectanglePlacement::centred);
+        logoImageComponent.setImage(Logo, juce::RectanglePlacement::centred);
     else
         jassert(!Logo.isNull());
 
@@ -66,7 +66,7 @@ MainComponent::MainComponent() :inputGainVar{ -24.0 }, shelfGain{ 0.0 }
 
 
     //add image components and make them visible
-    addAndMakeVisible(mImageComponent);
+    addAndMakeVisible(logoImageComponent);
     addAndMakeVisible(bassImageComponent);
     addAndMakeVisible(softImageComponent);
     addAndMakeVisible(loudImageComponent);
@@ -80,8 +80,8 @@ MainComponent::MainComponent() :inputGainVar{ -24.0 }, shelfGain{ 0.0 }
     addAndMakeVisible(shelfGainDescLabel);
     shelfGainDescLabel.setFont(Vfont);
 
-    addAndMakeVisible(cutoffFreqLabel);
-    cutoffFreqLabel.setFont(Vfont);
+    addAndMakeVisible(highShelfCutoffhighShelfFreqUnitLabel);
+    highShelfCutoffhighShelfFreqUnitLabel.setFont(Vfont);
 
     addAndMakeVisible(shelfGainUnitLabel);
     shelfGainUnitLabel.setFont(font);
@@ -113,15 +113,15 @@ MainComponent::MainComponent() :inputGainVar{ -24.0 }, shelfGain{ 0.0 }
     inputGain.setNumDecimalPlacesToDisplay(0);
     inputGain.onValueChange = [this]() {inputGainVar = inputGain.getValue(); };
 
-    addAndMakeVisible(cutoffFrequency);
-    cutoffFrequency.setRange(250.0, 5000.0);
-    cutoffFrequency.setSliderStyle(juce::Slider::SliderStyle::Rotary);
-    cutoffFrequency.setTextBoxStyle(juce::Slider::TextBoxRight, false, 40, 20);
-    cutoffFrequency.setNumDecimalPlacesToDisplay(0);
+    addAndMakeVisible(highShelfCutoffFrequency);
+    highShelfCutoffFrequency.setRange(250.0, 5000.0);
+    highShelfCutoffFrequency.setSliderStyle(juce::Slider::SliderStyle::Rotary);
+    highShelfCutoffFrequency.setTextBoxStyle(juce::Slider::TextBoxRight, false, 40, 20);
+    highShelfCutoffFrequency.setNumDecimalPlacesToDisplay(0);
 
 
-    addAndMakeVisible(freqLabel);
-    freqLabel.setText("Hz", juce::NotificationType::dontSendNotification);
+    addAndMakeVisible(highShelfFreqUnitLabel);
+    highShelfFreqUnitLabel.setText("Hz", juce::NotificationType::dontSendNotification);
 
     addAndMakeVisible(qualityFactor);
     qualityFactor.setRange(0.1, 10.0);
@@ -133,11 +133,7 @@ MainComponent::MainComponent() :inputGainVar{ -24.0 }, shelfGain{ 0.0 }
     qualityFactorLabel.setText("Quality Factor", juce::NotificationType::dontSendNotification);
 
 
-    auto* device = deviceManager.getCurrentAudioDevice();
-    if(device != nullptr)
-        visualizerNumChannel = device->getActiveInputChannels().toInteger();
-
-    visualizer.setNumChannels(visualizerNumChannel);
+    
     addAndMakeVisible(visualizer);
 
 
@@ -174,7 +170,9 @@ void MainComponent::prepareToPlay(int samplesPerBlockExpected, double sampleRate
     // but be careful - it will be called on the audio thread, not the GUI thread.
     //get device number of channels
 
-   
+    auto* device = deviceManager.getCurrentAudioDevice();
+    visualizerNumChannel = device->getActiveInputChannels().toInteger();
+    visualizer.setNumChannels(visualizerNumChannel);
 
     // For more details, see the help for AudioProcessor::prepareToPlay()
     juce::dsp::ProcessSpec spec;
@@ -313,34 +311,34 @@ void MainComponent::resized()
     auto visualizerArea = subArea.removeFromTop(subArea.getHeight() * 1.f / 6.f);
     //auto inputGainSliderLabelArea = subArea.removeFromTop(subArea.getHeight() * 1.f / 5.f);
     //auto inputGainSliderArea = subArea.removeFromTop(subArea.getHeight() * 1.f / 4.f);
-    //auto shelfGainandcutoffFrequencyLabelArea = subArea.removeFromTop(subArea.getHeight() * 1.f / 3.f);
-    //auto shelfGainandcutoffFrequencySliderArea = subArea.removeFromTop(subArea.getHeight() * 1.f / 2.f);
-    auto cutoffFrequencyArea = subArea.removeFromLeft(subArea.getWidth() * 1.f / 3.f).removeFromTop(subArea.getHeight()* 4.f/5.f);
+    //auto shelfGainandhighShelfCutoffFrequencyLabelArea = subArea.removeFromTop(subArea.getHeight() * 1.f / 3.f);
+    //auto shelfGainandhighShelfCutoffFrequencySliderArea = subArea.removeFromTop(subArea.getHeight() * 1.f / 2.f);
+    auto highShelfCutoffFrequencyArea = subArea.removeFromLeft(subArea.getWidth() * 1.f / 3.f).removeFromTop(subArea.getHeight()* 4.f/5.f);
     auto inputGainArea = subArea.removeFromLeft(subArea.getWidth() * 1.f / 2.f).removeFromTop(subArea.getHeight() * 4.f / 5.f);
     auto shelfGainArea = subArea.removeFromLeft(subArea.getWidth()).removeFromTop(subArea.getHeight() * 4.f / 5.f);
     
 
     
-    mImageComponent.setBounds(logoArea);
+    logoImageComponent.setBounds(logoArea);
     visualizer.setBounds(visualizerArea.removeFromTop(visualizerArea.getHeight() * 8.f / 9.f));
     inputGainLabel.setBounds(inputGainArea.removeFromTop(inputGainArea.getHeight() * 1.f/4.f).removeFromRight(componentWidth));
     inputGain.setBounds(inputGainArea.removeFromTop(inputGainArea.getHeight() * 1.f / 3.f));
-    cutoffFrequency.setBounds(cutoffFrequencyArea.removeFromBottom(cutoffFrequencyArea.getHeight() * 1.f / 4.f));
-    cutoffFreqLabel.setBounds(cutoffFrequencyArea.removeFromBottom(cutoffFrequencyArea.getHeight() * 1.f / 3.f).removeFromRight(componentWidth - 35));
+    highShelfCutoffFrequency.setBounds(highShelfCutoffFrequencyArea.removeFromBottom(highShelfCutoffFrequencyArea.getHeight() * 1.f / 4.f));
+    highShelfCutoffhighShelfFreqUnitLabel.setBounds(highShelfCutoffFrequencyArea.removeFromBottom(highShelfCutoffFrequencyArea.getHeight() * 1.f / 3.f).removeFromRight(componentWidth - 35));
     shelfFiltersGain.setBounds(shelfGainArea.removeFromBottom(shelfGainArea.getHeight() * 1.f / 4.f));
     shelfGainDescLabel.setBounds(shelfGainArea.removeFromBottom(shelfGainArea.getHeight() *1.f/3.f).removeFromRight(componentWidth));
-    bassImageComponent.setBounds( cutoffFrequency.getX() + cutoffFrequency.getWidth()/3.0f, cutoffFrequency.getBottom() + 5.f, 15.f, 15.f);
+    bassImageComponent.setBounds( highShelfCutoffFrequency.getX() + highShelfCutoffFrequency.getWidth()/3.0f, highShelfCutoffFrequency.getBottom() + 5.f, 15.f, 15.f);
     trebleImageComponent.setBounds(bassImageComponent.getX() + 35.f, bassImageComponent.getY(), 15.f ,15.f);
     softImageComponent.setBounds(shelfFiltersGain.getX() + shelfFiltersGain.getWidth() / 3.0f, shelfFiltersGain.getBottom() + 5.f, 15.f, 15.f);
     loudImageComponent.setBounds(softImageComponent.getX() + 37.f, softImageComponent.getY(), 15.f, 15.f);
     headsetWarning.setBounds(headphoneWarningLabel.removeFromTop(headphoneWarningLabel.getHeight() * 4.f / 4.f));
     shelfGainUnitLabel.setBounds(shelfFiltersGain.getX() + shelfFiltersGain.getWidth(), shelfFiltersGain.getY() + shelfFiltersGain.getHeight()/2.2 - shelfFiltersGain.getTextBoxHeight()/2, 30.f, 30.f);
     inputGainUnitLabel.setBounds(inputGain.getX() + inputGain.getWidth(), inputGain.getY() + inputGain.getHeight() / 2.2 - inputGain.getTextBoxHeight() / 2, 30.f, 30.f);
-    freqLabel.setBounds(cutoffFrequency.getX() + cutoffFrequency.getWidth(), cutoffFrequency.getY() + cutoffFrequency.getHeight() / 2.5 - cutoffFrequency.getTextBoxHeight() / 2, 40.f, 40.f);
+    highShelfFreqUnitLabel.setBounds(highShelfCutoffFrequency.getX() + highShelfCutoffFrequency.getWidth(), highShelfCutoffFrequency.getY() + highShelfCutoffFrequency.getHeight() / 2.5 - highShelfCutoffFrequency.getTextBoxHeight() / 2, 40.f, 40.f);
 
    /* inputGainLabel.setBounds(inputGainSliderLabelArea.removeFromRight(inputGainSliderLabelArea.getWidth()/2 + inputGainLabel.getWidth()/2));
     inputGain.setBounds(inputGainSliderArea.removeFromRight(inputGainSliderArea.getWidth() * 1.7f / 3.f).removeFromLeft(inputGainSliderArea.getWidth() * 1.f / 3.f));*/
-    ////mImageComponent.setBounds(40, 10, 70, 70);
+    ////logoImageComponent.setBounds(40, 10, 70, 70);
     //
     //trebleImageComponent.setBounds(HalfParentWidth - 90, 590, 20, 20);
     //bassImageComponent.setBounds(HalfParentWidth - 145, 590, 20, 20);
@@ -349,14 +347,14 @@ void MainComponent::resized()
     ////visualizer.setCentreRelative(0.5f, 0.5f);
    
     ////visualizer.setBounds(HalfParentWidth - 125, 150, 250, 80);
-    //cutoffFrequency.setBounds(SliderBounds);
-    ////cutoffFrequency.setBounds(HalfParentWidth - 165, 440, 150, 200);
+    //highShelfCutoffFrequency.setBounds(SliderBounds);
+    ////highShelfCutoffFrequency.setBounds(HalfParentWidth - 165, 440, 150, 200);
     //shelfGainDescLabel.setBounds(HalfParentWidth - 5, 320, 200, 300);
     //shelfGainUnitLabel.setBounds(HalfParentWidth + 180, 520, 30, 40);
-    //cutoffFreqLabel.setBounds(HalfParentWidth - 160, 320, 200, 300);
+    //highShelfCutoffhighShelfFreqUnitLabel.setBounds(HalfParentWidth - 160, 320, 200, 300);
     //shelfFiltersGain.setBounds(SliderBounds);
     ////shelfFiltersGain.setBounds(HalfParentWidth + 30, 440, 150, 200);
-    //freqLabel.setBounds(HalfParentWidth - 15, 520, 30, 40);
+    //highShelfFreqUnitLabel.setBounds(HalfParentWidth - 15, 520, 30, 40);
     //InputGain.setBounds(SliderBounds);
     ////InputGain.setBounds(HalfParentWidth - (InputGain.getWidth() / 2 - 15), 300, 150, 100);
     //inputGainLabel.setBounds(HalfParentWidth - (inputGainLabel.getWidth() / 2), 230, 200, 100);
@@ -376,7 +374,7 @@ const double MainComponent::getlastSampleRate()
 void MainComponent::UpdateFilter()
 {
     //get the values of the sliders from the gui
-    float cutoffFreq = std::clamp<float>((float)cutoffFrequency.getValue(), minFrequency, maxFrequency/2); 
+    float cutoffFreq = std::clamp<float>((float)highShelfCutoffFrequency.getValue(), minFrequency, maxFrequency/2); 
     
 
 

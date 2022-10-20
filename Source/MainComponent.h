@@ -64,17 +64,17 @@ private:
     // Your private member variables go here...
     // 
     //labels
-    juce::Label freqLabel;
+    juce::Label highShelfFreqUnitLabel;
     juce::Label qualityFactorLabel;
     juce::Label shelfGainUnitLabel{ "Soft", "dB" };
     juce::Label shelfGainDescLabel{ "shelfGain", "Shelf Gain" };
-    juce::Label cutoffFreqLabel{ "cutoffFreq", "Cutoff" };
+    juce::Label highShelfCutoffhighShelfFreqUnitLabel{ "cutoffFreq", "Cutoff" };
     juce::Label inputGainLabel{ "inputGain", "Mic Volume" };
     juce::Label inputGainUnitLabel{ "inputGainUnit", "dB" };
     juce::Label headsetWarning{ "headsetWarning", "Please put on your headset to avoid feedback" };
 
     //Sliders
-    juce::Slider cutoffFrequency;
+    juce::Slider highShelfCutoffFrequency;
     juce::Slider qualityFactor;
     juce::Slider volume;
     juce::Slider shelfFiltersGain;
@@ -85,7 +85,7 @@ private:
     juce::Font Vfont{ 30.0f };
 
     //Image Components
-    juce::ImageComponent mImageComponent;
+    juce::ImageComponent logoImageComponent;
     juce::ImageComponent softImageComponent;
     juce::ImageComponent loudImageComponent;
     juce::ImageComponent trebleImageComponent;
