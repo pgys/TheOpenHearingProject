@@ -1,0 +1,4 @@
+#Thu Oct 20 20:18:29 WAT 2022
+base.0=C\:\\Users\\RAZER BLADE\\Desktop\\TOHP_DeveloperClone\\Builds\\Android\\app\\build\\intermediates\\dex\\debug_Debug\\mergeDexDebug_Debug\\classes.dex
+renamed.0=classes.dex
+path.0=classes.dex

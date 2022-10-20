@@ -305,17 +305,17 @@ void MainComponent::resized()
     const int componentHeight = 200;
     float HalfParentWidth = getParentWidth()/2;
     //set bounds of the GUI components
-    auto logoArea = area.removeFromLeft(area.getWidth() * 1.f / 5.f).removeFromTop(area.getHeight() * 1.f / 8.f);
+    auto logoArea = area.removeFromLeft(area.getWidth() * 0.4f / 5.f).removeFromTop(area.getHeight() * 0.6f / 8.f).removeFromRight(area.getWidth() * 0.4f / 5.f);
     auto headphoneWarningLabel = area.removeFromBottom(area.getHeight() *1.f/7.f);
-    auto subArea = area.removeFromLeft(area.getWidth() * 3.f / 4.f).removeFromBottom(area.getHeight() * 5.f / 6.f);
-    auto visualizerArea = subArea.removeFromTop(subArea.getHeight() * 1.f / 6.f);
+    auto subArea = area.removeFromLeft(area.getWidth()).removeFromBottom(area.getHeight() * 5.f / 6.f);
+    auto visualizerArea = subArea.removeFromTop(subArea.getHeight() * 1.f / 6.f).removeFromLeft(subArea.getWidth() * 5.6f/6.f);
     //auto inputGainSliderLabelArea = subArea.removeFromTop(subArea.getHeight() * 1.f / 5.f);
     //auto inputGainSliderArea = subArea.removeFromTop(subArea.getHeight() * 1.f / 4.f);
     //auto shelfGainandhighShelfCutoffFrequencyLabelArea = subArea.removeFromTop(subArea.getHeight() * 1.f / 3.f);
     //auto shelfGainandhighShelfCutoffFrequencySliderArea = subArea.removeFromTop(subArea.getHeight() * 1.f / 2.f);
-    auto highShelfCutoffFrequencyArea = subArea.removeFromLeft(subArea.getWidth() * 1.f / 3.f).removeFromTop(subArea.getHeight()* 4.f/5.f);
-    auto inputGainArea = subArea.removeFromLeft(subArea.getWidth() * 1.f / 2.f).removeFromTop(subArea.getHeight() * 4.f / 5.f);
-    auto shelfGainArea = subArea.removeFromLeft(subArea.getWidth()).removeFromTop(subArea.getHeight() * 4.f / 5.f);
+    auto highShelfCutoffFrequencyArea = subArea.removeFromLeft(subArea.getWidth() * 0.93f / 3.f).removeFromTop(subArea.getHeight()* 4.f/5.f);
+    auto inputGainArea = subArea.removeFromLeft(subArea.getWidth() * 1.35f / 3.f).removeFromTop(subArea.getHeight() * 4.f / 5.f);
+    auto shelfGainArea = subArea.removeFromLeft(subArea.getWidth() * 5.0f/6.f).removeFromTop(subArea.getHeight() * 4.f / 5.f);
     
 
     
@@ -327,9 +327,9 @@ void MainComponent::resized()
     highShelfCutoffhighShelfFreqUnitLabel.setBounds(highShelfCutoffFrequencyArea.removeFromBottom(highShelfCutoffFrequencyArea.getHeight() * 1.f / 3.f).removeFromRight(componentWidth - 35));
     shelfFiltersGain.setBounds(shelfGainArea.removeFromBottom(shelfGainArea.getHeight() * 1.f / 4.f));
     shelfGainDescLabel.setBounds(shelfGainArea.removeFromBottom(shelfGainArea.getHeight() *1.f/3.f).removeFromRight(componentWidth));
-    bassImageComponent.setBounds( highShelfCutoffFrequency.getX() + highShelfCutoffFrequency.getWidth()/3.0f, highShelfCutoffFrequency.getBottom() + 5.f, 15.f, 15.f);
+    bassImageComponent.setBounds( highShelfCutoffFrequency.getX() - 25.f + highShelfCutoffFrequency.getWidth()/3.0f, highShelfCutoffFrequency.getBottom() + 5.f, 15.f, 15.f);
     trebleImageComponent.setBounds(bassImageComponent.getX() + 35.f, bassImageComponent.getY(), 15.f ,15.f);
-    softImageComponent.setBounds(shelfFiltersGain.getX() + shelfFiltersGain.getWidth() / 3.0f, shelfFiltersGain.getBottom() + 5.f, 15.f, 15.f);
+    softImageComponent.setBounds(shelfFiltersGain.getX() - 25.f + shelfFiltersGain.getWidth() / 3.0f, shelfFiltersGain.getBottom() + 5.f, 15.f, 15.f);
     loudImageComponent.setBounds(softImageComponent.getX() + 37.f, softImageComponent.getY(), 15.f, 15.f);
     headsetWarning.setBounds(headphoneWarningLabel.removeFromTop(headphoneWarningLabel.getHeight() * 4.f / 4.f));
     shelfGainUnitLabel.setBounds(shelfFiltersGain.getX() + shelfFiltersGain.getWidth(), shelfFiltersGain.getY() + shelfFiltersGain.getHeight()/2.2 - shelfFiltersGain.getTextBoxHeight()/2, 30.f, 30.f);

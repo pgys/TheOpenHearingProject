@@ -82,7 +82,7 @@ private:
     
     //Label fonts
     juce::Font font{};
-    juce::Font Vfont{ 30.0f };
+    juce::Font Vfont{ 20.0f };
 
     //Image Components
     juce::ImageComponent logoImageComponent;
