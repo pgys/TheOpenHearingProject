@@ -71,17 +71,18 @@ private:
     juce::Label cutoffFreqLabel{ "cutoffFreq", "Cutoff" };
     juce::Label inputGainLabel{ "inputGain", "Mic Volume" };
     juce::Label inputGainUnitLabel{ "inputGainUnit", "dB" };
+    juce::Label headsetWarning{ "headsetWarning", "Please put on your headset to avoid feedback" };
 
     //Sliders
     juce::Slider cutoffFrequency;
     juce::Slider qualityFactor;
     juce::Slider volume;
-    juce::Slider ShelfFiltersGain;
-    juce::Slider InputGain;
+    juce::Slider shelfFiltersGain;
+    juce::Slider inputGain;
     
     //Label fonts
     juce::Font font{};
-    juce::Font Vfont{ 40.0f };
+    juce::Font Vfont{ 30.0f };
 
     //Image Components
     juce::ImageComponent mImageComponent;

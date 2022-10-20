@@ -2,7 +2,7 @@
 #include <JuceHeader.h>
 
 /** Global variable for the visualizer constructor */
-std::atomic<int> visualizerNumChannel{ 2 };
+std::atomic<int> visualizerNumChannel{ 0 };
 //==============================================================================
 MainComponent::MainComponent() :inputGainVar{ -24.0 }, shelfGain{ 0.0 }
 {
@@ -92,23 +92,26 @@ MainComponent::MainComponent() :inputGainVar{ -24.0 }, shelfGain{ 0.0 }
     addAndMakeVisible(inputGainLabel);
     inputGainLabel.setFont(Vfont);
 
-
-    addAndMakeVisible(ShelfFiltersGain);
-    ShelfFiltersGain.setRange(0.0, 6.0, 1.0);
-    ShelfFiltersGain.setValue(-24, juce::NotificationType::dontSendNotification);
-    ShelfFiltersGain.setSliderStyle(juce::Slider::SliderStyle::Rotary);
-    ShelfFiltersGain.setTextBoxStyle(juce::Slider::TextBoxRight, false, 40, 20);
-    ShelfFiltersGain.setNumDecimalPlacesToDisplay(0);
-    ShelfFiltersGain.onValueChange = [this]() {shelfGain = ShelfFiltersGain.getValue(); };
+    addAndMakeVisible(headsetWarning);
+    headsetWarning.setFont(font);
 
 
-    addAndMakeVisible(InputGain);
-    InputGain.setRange(0.0, 6.0, 1.0);
-    InputGain.setValue(-24, juce::NotificationType::dontSendNotification);
-    InputGain.setSliderStyle(juce::Slider::SliderStyle::Rotary);
-    InputGain.setTextBoxStyle(juce::Slider::TextBoxRight, false, 40, 20);
-    InputGain.setNumDecimalPlacesToDisplay(0);
-    InputGain.onValueChange = [this]() {inputGainVar = InputGain.getValue(); };
+    addAndMakeVisible(shelfFiltersGain);
+    shelfFiltersGain.setRange(0.0, 6.0, 1.0);
+    shelfFiltersGain.setValue(-24, juce::NotificationType::dontSendNotification);
+    shelfFiltersGain.setSliderStyle(juce::Slider::SliderStyle::Rotary);
+    shelfFiltersGain.setTextBoxStyle(juce::Slider::TextBoxRight, false, 40, 20);
+    shelfFiltersGain.setNumDecimalPlacesToDisplay(0);
+    shelfFiltersGain.onValueChange = [this]() {shelfGain = shelfFiltersGain.getValue(); };
+
+
+    addAndMakeVisible(inputGain);
+    inputGain.setRange(0.0, 6.0, 1.0);
+    inputGain.setValue(-24, juce::NotificationType::dontSendNotification);
+    inputGain.setSliderStyle(juce::Slider::SliderStyle::Rotary);
+    inputGain.setTextBoxStyle(juce::Slider::TextBoxRight, false, 40, 20);
+    inputGain.setNumDecimalPlacesToDisplay(0);
+    inputGain.onValueChange = [this]() {inputGainVar = inputGain.getValue(); };
 
     addAndMakeVisible(cutoffFrequency);
     cutoffFrequency.setRange(250.0, 5000.0);
@@ -130,6 +133,11 @@ MainComponent::MainComponent() :inputGainVar{ -24.0 }, shelfGain{ 0.0 }
     qualityFactorLabel.setText("Quality Factor", juce::NotificationType::dontSendNotification);
 
 
+    auto* device = deviceManager.getCurrentAudioDevice();
+    if(device != nullptr)
+        visualizerNumChannel = device->getActiveInputChannels().toInteger();
+
+    visualizer.setNumChannels(visualizerNumChannel);
     addAndMakeVisible(visualizer);
 
 
@@ -146,9 +154,7 @@ MainComponent::MainComponent() :inputGainVar{ -24.0 }, shelfGain{ 0.0 }
         setAudioChannels(2, 2);
     }
 
-    //get device number of channels
-    auto* device = deviceManager.getCurrentAudioDevice();
-    visualizerNumChannel = device->getActiveInputChannels().toInteger();
+    
 
 }
 MainComponent::~MainComponent()
@@ -166,6 +172,9 @@ void MainComponent::prepareToPlay(int samplesPerBlockExpected, double sampleRate
 
     // You can use this function to initialise any resources you might need,
     // but be careful - it will be called on the audio thread, not the GUI thread.
+    //get device number of channels
+
+   
 
     // For more details, see the help for AudioProcessor::prepareToPlay()
     juce::dsp::ProcessSpec spec;
@@ -225,7 +234,7 @@ void MainComponent::getNextAudioBlock (const juce::AudioSourceChannelInfo& buffe
     GainInstance.process(juce::dsp::ProcessContextReplacing<float>(block));
 
     //push the processed data to the visualizer if gain > 0.0
-    if (inputGainVar > 0)
+    if (inputGainVar > 0.0f)
         visualizer.pushBuffer(bufferToFill);
     else
         visualizer.clear();
@@ -288,24 +297,70 @@ void MainComponent::resized()
     // This is called when the MainContentComponent is resized.
     // If you add any child components, this is where you should
     // update their positions.
+
+    juce::Rectangle<int> area = getLocalBounds();
+    
+    area.removeFromTop(10);
+
+    
+    const int componentWidth = 200;
+    const int componentHeight = 200;
     float HalfParentWidth = getParentWidth()/2;
     //set bounds of the GUI components
-    mImageComponent.setBounds(40, 10,70, 70 );
-    trebleImageComponent.setBounds(HalfParentWidth - 90, 590, 20, 20);
-    bassImageComponent.setBounds(HalfParentWidth - 145, 590, 20, 20);
-    loudImageComponent.setBounds(HalfParentWidth + 105, 590, 20, 20);
-    softImageComponent.setBounds(HalfParentWidth + 50, 590, 20, 20);
-    visualizer.setCentreRelative(0.5f, 0.5f);
-    visualizer.setBounds(HalfParentWidth - 125, 150, 250, 80);
-    cutoffFrequency.setBounds(HalfParentWidth - 165, 440, 150, 200);
-    shelfGainDescLabel.setBounds(HalfParentWidth - 5, 320, 200, 300);
-    shelfGainUnitLabel.setBounds(HalfParentWidth + 180, 520, 30, 40);
-    cutoffFreqLabel.setBounds(HalfParentWidth - 160, 320, 200, 300);
-    ShelfFiltersGain.setBounds(HalfParentWidth + 30, 440, 150, 200);
-    freqLabel.setBounds(HalfParentWidth - 15, 520, 30, 40);
-    InputGain.setBounds(HalfParentWidth - (InputGain.getWidth()/2 - 15), 300, 150, 100);
-    inputGainLabel.setBounds(HalfParentWidth - (inputGainLabel.getWidth() / 2), 230, 200, 100);
-    inputGainUnitLabel.setBounds(HalfParentWidth - (InputGain.getWidth() / 2 - 15) + 150, 330, 40, 40);
+    auto logoArea = area.removeFromLeft(area.getWidth() * 1.f / 5.f).removeFromTop(area.getHeight() * 1.f / 8.f);
+    auto headphoneWarningLabel = area.removeFromBottom(area.getHeight() *1.f/7.f);
+    auto subArea = area.removeFromLeft(area.getWidth() * 3.f / 4.f).removeFromBottom(area.getHeight() * 5.f / 6.f);
+    auto visualizerArea = subArea.removeFromTop(subArea.getHeight() * 1.f / 6.f);
+    //auto inputGainSliderLabelArea = subArea.removeFromTop(subArea.getHeight() * 1.f / 5.f);
+    //auto inputGainSliderArea = subArea.removeFromTop(subArea.getHeight() * 1.f / 4.f);
+    //auto shelfGainandcutoffFrequencyLabelArea = subArea.removeFromTop(subArea.getHeight() * 1.f / 3.f);
+    //auto shelfGainandcutoffFrequencySliderArea = subArea.removeFromTop(subArea.getHeight() * 1.f / 2.f);
+    auto cutoffFrequencyArea = subArea.removeFromLeft(subArea.getWidth() * 1.f / 3.f).removeFromTop(subArea.getHeight()* 4.f/5.f);
+    auto inputGainArea = subArea.removeFromLeft(subArea.getWidth() * 1.f / 2.f).removeFromTop(subArea.getHeight() * 4.f / 5.f);
+    auto shelfGainArea = subArea.removeFromLeft(subArea.getWidth()).removeFromTop(subArea.getHeight() * 4.f / 5.f);
+    
+
+    
+    mImageComponent.setBounds(logoArea);
+    visualizer.setBounds(visualizerArea.removeFromTop(visualizerArea.getHeight() * 8.f / 9.f));
+    inputGainLabel.setBounds(inputGainArea.removeFromTop(inputGainArea.getHeight() * 1.f/4.f).removeFromRight(componentWidth));
+    inputGain.setBounds(inputGainArea.removeFromTop(inputGainArea.getHeight() * 1.f / 3.f));
+    cutoffFrequency.setBounds(cutoffFrequencyArea.removeFromBottom(cutoffFrequencyArea.getHeight() * 1.f / 4.f));
+    cutoffFreqLabel.setBounds(cutoffFrequencyArea.removeFromBottom(cutoffFrequencyArea.getHeight() * 1.f / 3.f).removeFromRight(componentWidth - 35));
+    shelfFiltersGain.setBounds(shelfGainArea.removeFromBottom(shelfGainArea.getHeight() * 1.f / 4.f));
+    shelfGainDescLabel.setBounds(shelfGainArea.removeFromBottom(shelfGainArea.getHeight() *1.f/3.f).removeFromRight(componentWidth));
+    bassImageComponent.setBounds( cutoffFrequency.getX() + cutoffFrequency.getWidth()/3.0f, cutoffFrequency.getBottom() + 5.f, 15.f, 15.f);
+    trebleImageComponent.setBounds(bassImageComponent.getX() + 35.f, bassImageComponent.getY(), 15.f ,15.f);
+    softImageComponent.setBounds(shelfFiltersGain.getX() + shelfFiltersGain.getWidth() / 3.0f, shelfFiltersGain.getBottom() + 5.f, 15.f, 15.f);
+    loudImageComponent.setBounds(softImageComponent.getX() + 37.f, softImageComponent.getY(), 15.f, 15.f);
+    headsetWarning.setBounds(headphoneWarningLabel.removeFromTop(headphoneWarningLabel.getHeight() * 4.f / 4.f));
+    shelfGainUnitLabel.setBounds(shelfFiltersGain.getX() + shelfFiltersGain.getWidth(), shelfFiltersGain.getY() + shelfFiltersGain.getHeight()/2.2 - shelfFiltersGain.getTextBoxHeight()/2, 30.f, 30.f);
+    inputGainUnitLabel.setBounds(inputGain.getX() + inputGain.getWidth(), inputGain.getY() + inputGain.getHeight() / 2.2 - inputGain.getTextBoxHeight() / 2, 30.f, 30.f);
+    freqLabel.setBounds(cutoffFrequency.getX() + cutoffFrequency.getWidth(), cutoffFrequency.getY() + cutoffFrequency.getHeight() / 2.5 - cutoffFrequency.getTextBoxHeight() / 2, 40.f, 40.f);
+
+   /* inputGainLabel.setBounds(inputGainSliderLabelArea.removeFromRight(inputGainSliderLabelArea.getWidth()/2 + inputGainLabel.getWidth()/2));
+    inputGain.setBounds(inputGainSliderArea.removeFromRight(inputGainSliderArea.getWidth() * 1.7f / 3.f).removeFromLeft(inputGainSliderArea.getWidth() * 1.f / 3.f));*/
+    ////mImageComponent.setBounds(40, 10, 70, 70);
+    //
+    //trebleImageComponent.setBounds(HalfParentWidth - 90, 590, 20, 20);
+    //bassImageComponent.setBounds(HalfParentWidth - 145, 590, 20, 20);
+    //loudImageComponent.setBounds(HalfParentWidth + 105, 590, 20, 20);
+    //softImageComponent.setBounds(HalfParentWidth + 50, 590, 20, 20);
+    ////visualizer.setCentreRelative(0.5f, 0.5f);
+   
+    ////visualizer.setBounds(HalfParentWidth - 125, 150, 250, 80);
+    //cutoffFrequency.setBounds(SliderBounds);
+    ////cutoffFrequency.setBounds(HalfParentWidth - 165, 440, 150, 200);
+    //shelfGainDescLabel.setBounds(HalfParentWidth - 5, 320, 200, 300);
+    //shelfGainUnitLabel.setBounds(HalfParentWidth + 180, 520, 30, 40);
+    //cutoffFreqLabel.setBounds(HalfParentWidth - 160, 320, 200, 300);
+    //shelfFiltersGain.setBounds(SliderBounds);
+    ////shelfFiltersGain.setBounds(HalfParentWidth + 30, 440, 150, 200);
+    //freqLabel.setBounds(HalfParentWidth - 15, 520, 30, 40);
+    //InputGain.setBounds(SliderBounds);
+    ////InputGain.setBounds(HalfParentWidth - (InputGain.getWidth() / 2 - 15), 300, 150, 100);
+    //inputGainLabel.setBounds(HalfParentWidth - (inputGainLabel.getWidth() / 2), 230, 200, 100);
+    //inputGainUnitLabel.setBounds(HalfParentWidth - (InputGain.getWidth() / 2 - 15) + 150, 330, 40, 40);
 }
 
 void MainComponent::setLastSampleRate(double _sampleRate)const
