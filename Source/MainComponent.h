@@ -68,7 +68,7 @@ private:
     juce::Label qualityFactorLabel;
     juce::Label shelfGainUnitLabel{ "Soft", "dB" };
     juce::Label shelfGainDescLabel{ "shelfGain", "Shelf Gain" };
-    juce::Label highShelfCutoffhighShelfFreqUnitLabel{ "cutoffFreq", "Lower Cutoff" };
+    juce::Label highShelfCutoffhighShelfFreqLabel{ "cutoffFreq", "Lower Cutoff" };
     juce::Label inputGainLabel{ "inputGain", "Mic Volume" };
     juce::Label inputGainUnitLabel{ "inputGainUnit", "dB" };
     juce::Label headsetWarning{ "headsetWarning", "Please put on your headset to avoid feedback" };
