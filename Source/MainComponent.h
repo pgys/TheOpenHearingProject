@@ -36,26 +36,25 @@ public:
     void paint (juce::Graphics& g) override;
     void resized() override;
 
-    //Bandpass Filter instance
+    //Filter instance
     juce::dsp::ProcessorDuplicator<juce::dsp::IIR::Filter<float>,
         juce::dsp::IIR::Coefficients<float>>
-        BandPassFilter;
+        HighShelfFilter;
+
+    juce::dsp::ProcessorDuplicator<juce::dsp::IIR::Filter<float>,
+        juce::dsp::IIR::Coefficients<float>>
+        LowShelfFilter;
 
     //Gain Instance
-    juce::dsp::Gain<float> Gain;
+    juce::dsp::Gain<float> GainInstance;
 
     //Member getter and setter functions
-    void setLastSampleRate(const double sampleRate);
-    double getlastSampleRate ()const;
+    void setLastSampleRate (double sampleRate)const;
+    const double getlastSampleRate ();
 
 
-    double gain;
-   
-    void setGain( const juce::String& buttonName);
-
-    int getNumInputChannels();
-
-    void setNumInputChannels(const int numInputChannels);
+    double inputGainVar{0.0};
+    double shelfGain{ 0.0 };
 
     //GUI visualizer
     Visualizer visualizer;
@@ -65,44 +64,42 @@ private:
     // Your private member variables go here...
     // 
     //labels
-    juce::Label freqLabel;
-    juce::Label resonanceLabel;
-    juce::Label volumeLabel1{ "Soft", "6 db" };
-    juce::Label volumeLabel2{ "Medium", "12 db" };
-    juce::Label volumeLabel3{ "Loud", "16 db" };
-    juce::Label defaultLabel{ "Default", "Default" };
-    juce::Label volumeM{ "Volume", "Volume" };
+    juce::Label highShelfFreqUnitLabel;
+    juce::Label qualityFactorLabel;
+    juce::Label shelfGainUnitLabel{ "Soft", "dB" };
+    juce::Label shelfGainDescLabel{ "shelfGain", "Shelf Gain" };
+    juce::Label highShelfCutoffhighShelfFreqLabel{ "cutoffFreq", "Lower Cutoff" };
+    juce::Label inputGainLabel{ "inputGain", "Mic Volume" };
+    juce::Label inputGainUnitLabel{ "inputGainUnit", "dB" };
+    juce::Label headsetWarning{ "headsetWarning", "Please put on your headset to avoid feedback" };
 
     //Sliders
-    juce::Slider middlefrequency;
-    juce::Slider resonance;
+    juce::Slider highShelfCutoffFrequency;
+    juce::Slider qualityFactor;
     juce::Slider volume;
-    juce::Slider _Gain;
+    juce::Slider shelfFiltersGain;
+    juce::Slider inputGain;
     
     //Label fonts
     juce::Font font{};
-    juce::Font Vfont{ 30.0f };
+    juce::Font Vfont{ 20.0f };
 
     //Image Components
-    juce::ImageComponent mImageComponent;
+    juce::ImageComponent logoImageComponent;
     juce::ImageComponent softImageComponent;
     juce::ImageComponent loudImageComponent;
     juce::ImageComponent trebleImageComponent;
     juce::ImageComponent bassImageComponent;
     juce::ImageComponent defaultImageComponent;
-    juce::ImageComponent defaultResonanceImageComponent;
-
-    ////Buttons
-    //juce::TextButton button1{ "+" };
-    //juce::TextButton button2{"++"};
-    //juce::TextButton button3{ "+++" };
+    juce::ImageComponent defaultqualityFactorImageComponent;
 
     //sampleRate
-    double sampleRate{ 44100 };
+    mutable double sampleRate{ 44100 };
 
     int numInputChannels{ 0 };
-    
 
+    juce::Slider::TextEntryBoxPosition GainTextBoxPos;
+    
 protected:
     //update bandpass filter
     void UpdateFilter();
@@ -112,7 +109,13 @@ protected:
     //    volumeButtons = 100
     //};
 
-    
+    const float minFrequency{ 250.f };
+    const float maxFrequency{ 6'000.f };
+    const float qFactorVal{ 1.35f };
+
+    //Shelf Gain values
+    float lowShelfGain{ 0.0f };
+    float highShelfGain{ 0.0f };
 
     //JUCE Look and Feel class override
     CustomLNF customLNF;
@@ -120,9 +123,6 @@ protected:
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MainComponent)
 };
  
-//int getChannelCount() {
-//    MainComponent Comp;
-//    return Comp.getNumInputChannels();
-//}
+
 
 

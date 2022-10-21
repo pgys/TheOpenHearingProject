@@ -2,7 +2,7 @@
 
 <JUCERPROJECT id="qcmawm" name="TheOpenHearingProject" projectType="guiapp"
               useAppConfig="0" addUsingNamespaceToJuceHeader="0" displaySplashScreen="1"
-              jucerFormatVersion="1">
+              jucerFormatVersion="1" cppLanguageStandard="17">
   <MAINGROUP id="DBFLvD" name="TheOpenHearingProject">
     <GROUP id="{8ED2E6E9-A0FA-8031-FF12-7E8B89EFC276}" name="Source">
       <FILE id="NBu6aG" name="CustomLNF.cpp" compile="1" resource="0" file="Source/CustomLNF.cpp"/>
