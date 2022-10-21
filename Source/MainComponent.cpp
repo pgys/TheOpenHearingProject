@@ -305,9 +305,9 @@ void MainComponent::resized()
     const int componentHeight = 200;
     float HalfParentWidth = getParentWidth()/2;
     //set bounds of the GUI components
-    auto logoArea = area.removeFromLeft(area.getWidth() * 0.4f / 5.f).removeFromTop(area.getHeight() * 0.6f / 8.f).removeFromRight(area.getWidth() * 0.4f / 5.f);
+    auto logoArea = area.removeFromLeft(area.getWidth() * 0.7f / 5.f).removeFromTop(area.getHeight() * 0.7f / 8.f);// .removeFromRight(area.getWidth() * 0.4f / 5.f);
     auto headphoneWarningLabel = area.removeFromBottom(area.getHeight() *1.f/7.f);
-    auto subArea = area.removeFromLeft(area.getWidth()).removeFromBottom(area.getHeight() * 5.f / 6.f);
+    auto subArea = area.removeFromLeft(area.getWidth() * 4.6f/5.f).removeFromBottom(area.getHeight() * 4.7f / 6.f);
     auto visualizerArea = subArea.removeFromTop(subArea.getHeight() * 1.f / 6.f).removeFromLeft(subArea.getWidth() * 5.6f/6.f);
     //auto inputGainSliderLabelArea = subArea.removeFromTop(subArea.getHeight() * 1.f / 5.f);
     //auto inputGainSliderArea = subArea.removeFromTop(subArea.getHeight() * 1.f / 4.f);
@@ -328,9 +328,9 @@ void MainComponent::resized()
     shelfFiltersGain.setBounds(shelfGainArea.removeFromBottom(shelfGainArea.getHeight() * 1.f / 4.f));
     shelfGainDescLabel.setBounds(shelfGainArea.removeFromBottom(shelfGainArea.getHeight() *1.f/3.f).removeFromRight(componentWidth));
     bassImageComponent.setBounds( highShelfCutoffFrequency.getX() - 25.f + highShelfCutoffFrequency.getWidth()/3.0f, highShelfCutoffFrequency.getBottom() + 5.f, 15.f, 15.f);
-    trebleImageComponent.setBounds(bassImageComponent.getX() + 35.f, bassImageComponent.getY(), 15.f ,15.f);
+    trebleImageComponent.setBounds(bassImageComponent.getX() + 28.f, bassImageComponent.getY(), 15.f ,15.f);
     softImageComponent.setBounds(shelfFiltersGain.getX() - 25.f + shelfFiltersGain.getWidth() / 3.0f, shelfFiltersGain.getBottom() + 5.f, 15.f, 15.f);
-    loudImageComponent.setBounds(softImageComponent.getX() + 37.f, softImageComponent.getY(), 15.f, 15.f);
+    loudImageComponent.setBounds(softImageComponent.getX() + 32.f, softImageComponent.getY(), 15.f, 15.f);
     headsetWarning.setBounds(headphoneWarningLabel.removeFromTop(headphoneWarningLabel.getHeight() * 4.f / 4.f));
     shelfGainUnitLabel.setBounds(shelfFiltersGain.getX() + shelfFiltersGain.getWidth(), shelfFiltersGain.getY() + shelfFiltersGain.getHeight()/2.2 - shelfFiltersGain.getTextBoxHeight()/2, 30.f, 30.f);
     inputGainUnitLabel.setBounds(inputGain.getX() + inputGain.getWidth(), inputGain.getY() + inputGain.getHeight() / 2.2 - inputGain.getTextBoxHeight() / 2, 30.f, 30.f);

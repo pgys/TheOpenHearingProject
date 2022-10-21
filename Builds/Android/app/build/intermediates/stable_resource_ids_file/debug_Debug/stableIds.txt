@@ -1,2 +1,0 @@
-com.yourcompany.theopenhearingproject:string/app_name = 0x7f020000
-com.yourcompany.theopenhearingproject:mipmap/tohp_logo = 0x7f010000
