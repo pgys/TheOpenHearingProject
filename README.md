@@ -21,4 +21,4 @@ Download the code of this project and load it as a project into the projucer. Th
 The code of this repository currently being revised. The new code will be released in another project repository which will be announced here. 
 Stay tuned!
 
-![App Screenshot](https://github.com/pgys/TheOpenHearingProject/blob/main/TOHP_Screenshot.jpeg?raw=true)
+![App Screenshot](https://github.com/pgys/TheOpenHearingProject/blob/main/TOHP_Screenshot.jpeg  width="300")
